@@ -131,7 +131,8 @@ not relabel that conversion as original work. Pinhole contributes:
 
 The extraction pattern and compact exact-scan kernel can be reused by other
 on-device multimodal retrieval apps, not only photo search. A dedicated
-[porting guide](PORTING.md) identifies the reuse seams and gives other developers
+[porting guide](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/blob/main/docs/PORTING.md)
+identifies the reuse seams and gives other developers
 an adoption and measurement checklist.
 
 ## Setup and validation
@@ -171,7 +172,8 @@ node tools/browser-offline.mjs
 ```
 
 To reproduce the exact model split and native Arm benchmark, follow
-[`bench/README.md`](../bench/README.md). The public workflow runs the complete
+[`bench/README.md`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/blob/main/bench/README.md).
+The public workflow runs the complete
 quality suite on x64 and all four benchmark/quality harnesses on
 `ubuntu-24.04-arm`.
 
