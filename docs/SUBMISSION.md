@@ -185,6 +185,12 @@ installation reload. That unlocks SharedArrayBuffer and up to four ONNX Runtime
 WASM threads on the hosted PWA. Unsupported browsers retain the exact same SIMD
 path with one thread rather than failing.
 
+Public Arm64 run
+[`31634280630`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31634280630)
+tests that static-host path without server headers, asserts cross-origin
+isolation and repeated-query cache correctness, then forces the browser offline,
+reloads, and completes another search with zero request or console errors.
+
 ### Build from source
 
 ```bash

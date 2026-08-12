@@ -33,6 +33,10 @@ The native Arm64 browser proof, exact model hashes, benchmark methodology, and
 quality guards are linked directly below; no account or special hardware is
 needed to evaluate the hosted product.
 
+The latest [public Arm64 quality run](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31634280630)
+also proves the headerless static-host isolation path, exact query-cache reuse,
+and a forced-offline reload/search—not only a development-server happy path.
+
 The deployed experience is measured too: a dated Lighthouse 12.8.2 mobile
 snapshot scored **97 Performance and 100 Accessibility / Best Practices / SEO**,
 and the full ranked-result flow passed its dynamic WCAG 2 A/AA gate. See the
