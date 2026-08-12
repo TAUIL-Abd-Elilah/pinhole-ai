@@ -1,0 +1,56 @@
+name: verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+
+  arm64-benchmark:
+    name: Microsoft Cobalt 100 evidence
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: npm ci
+      - run: npm run build:wasm
+      - run: python -m pip install -r requirements-dev.txt
+      - name: Capture Arm platform
+        run: |
+          uname -a
+          lscpu
+          node -p "JSON.stringify({arch: process.arch, platform: process.platform, cpus: require('os').cpus()}, null, 2)"
+      - name: Benchmark exact-parity model split
+        run: python tools/benchmark_model.py --samples 50 --warmup 7 --output bench-artifacts/model-cobalt.json
+      - name: Benchmark SIMD compact index
+        run: node tools/benchmark-index.mjs --output=bench-artifacts/index-cobalt.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pinhole-cobalt-100-${{ github.run_id }}
+          path: bench-artifacts/*.json
+          if-no-files-found: error

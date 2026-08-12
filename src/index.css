@@ -1,0 +1,80 @@
+@import '@fontsource-variable/bricolage-grotesque';
+@import '@fontsource-variable/spline-sans';
+@import '@fontsource/ibm-plex-mono/500.css';
+
+:root {
+  font-family: 'Spline Sans Variable', system-ui, sans-serif;
+  color: #14282c;
+  background: #dce7e8;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --ink: #14282c;
+  --muted-ink: #536c70;
+  --mist: #dce7e8;
+  --paper: #f7faf7;
+  --sea-glass: #aac5c5;
+  --safelight: #ed6547;
+  --deep-water: #284c52;
+  --line: rgba(20, 40, 44, 0.2);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background: var(--mist);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--safelight);
+  outline-offset: 3px;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

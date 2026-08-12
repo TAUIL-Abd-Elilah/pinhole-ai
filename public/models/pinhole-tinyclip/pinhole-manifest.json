@@ -1,0 +1,27 @@
+{
+  "source": {
+    "repository": "onnx-community/TinyCLIP-ViT-8M-16-Text-3M-YFCC15M-ONNX",
+    "revision": "9463a9c508a344c837ffefe9d724f3827bf2dc79",
+    "path": "onnx/model_int8.onnx",
+    "sha256": "844d1a46ab18acf50c989e541b12fe3b6dc7f8d6004725b4e992d142788e0600",
+    "bytes": 24281512
+  },
+  "artifacts": {
+    "text": {
+      "path": "onnx/text_model_quantized.onnx",
+      "sha256": "c4d75ebae0ae45b699a5bc9cceee1edffd73f60e465d4a6f64b56fd5f06c9a8c",
+      "bytes": 15367058
+    },
+    "vision": {
+      "path": "onnx/vision_model_quantized.onnx",
+      "sha256": "3b8d3f1d031299cc96fc4c8fac3d99927ddccbdc3962c46e2f36d3e4d7fe9681",
+      "bytes": 8957217
+    }
+  },
+  "parity": {
+    "text_exact": true,
+    "vision_exact": true,
+    "text_max_abs_error": 0.0,
+    "vision_max_abs_error": 0.0
+  }
+}
