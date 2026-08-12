@@ -9,7 +9,7 @@ the entrant and should be edited wherever they do not match their experience.
 
 - **Project name:** Pinhole
 - **Tagline:** Describe the moment. Find the photo. Nothing leaves your phone.
-- **Track:** Mobile AI
+- **Track:** Mobile AI (Track 3)
 - **Live application:** https://tauil-abd-elilah.github.io/pinhole-ai/
 - **Repository:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai
 - **License:** MIT
@@ -32,7 +32,7 @@ Vitest, Playwright, axe-core, GitHub Actions, Arm64, Microsoft Cobalt 100
 
 ## Custom challenge questions
 
-The unpublished gallery currently exposes these exact survey fields. Suggested
+The project gallery currently exposes these exact survey fields. Suggested
 choices are based on repository evidence and should be edited if they do not
 match the entrant's experience.
 

@@ -4,7 +4,7 @@
 
 - **Project:** Pinhole
 - **Tagline:** Describe the moment. Find the photo. Nothing leaves your phone.
-- **Track:** Mobile AI
+- **Track:** Mobile AI (Track 3)
 - **Live application:** https://tauil-abd-elilah.github.io/pinhole-ai/
 - **Public source:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai
 - **License:** MIT
@@ -16,10 +16,23 @@
 
 | Criterion | Fastest evidence |
 |---|---|
-| Technological implementation | Exact-parity ONNX graph split, lazy modality loading, compact INT8 index, and a 434-byte signed-INT8 WASM SIMD kernel; all headline comparisons have controls and correctness gates. |
-| WOW factor | One-click semantic photo search, followed in the 63-second demo by a second correct search while the product reports **Offline · local search active**. |
-| Impact | Personal photos and queries stay out of an inference API; the compact index uses **74.8% less memory**, and the demo accounts for photo bytes not uploaded. |
-| Developer experience | Public PWA, MIT source, pinned model hashes, raw Arm64 JSON, CI browser artifacts, benchmark instructions, and a reusable porting guide. |
+| Technological implementation | [Exact-parity graph extraction](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/blob/main/tools/prepare_model.py), lazy modality loading, a compact INT8 index, and a [434-byte signed-INT8 WASM SIMD kernel](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/blob/main/wasm/dot_i8.wat); every headline comparison has a control and correctness gate. |
+| WOW factor | [One-click semantic photo search](https://tauil-abd-elilah.github.io/pinhole-ai/), followed in the 63-second demo by a second correct search while the product reports **Offline · local search active**. |
+| Potential impact | Personal photos and queries stay out of an inference API; the index uses **74.8% less memory**, while the [reusable optimization kit](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/blob/main/docs/PORTING.md) transfers the pattern to other multimodal retrieval apps. |
+| Developer experience | Public PWA, MIT source, pinned hashes, [raw Arm64 JSON](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/tree/main/bench/results/cobalt-31625513958), CI browser artifacts, and one-command `npm run verify:submission` validation. |
+
+## Mobile AI track alignment
+
+Pinhole is a **Track 3: Mobile AI** entry, not a cloud-inference service. The
+host serves static application/model files only; ONNX inference, photo indexing,
+query embedding, ranking, and persistence execute inside the client browser.
+
+| Mobile AI expectation | Pinhole evidence |
+|---|---|
+| Local inference on Arm client devices | The installable PWA runs the same ONNX Runtime Web/WASM path in Android and Arm-laptop browsers; it has no application backend or inference endpoint. |
+| Mobile constraints | Exact graph separation removes vision work from each query; lazy loading, 74.8% smaller indexes, responsive workers, bounded caches, and offline persistence target memory, latency, and network dependence. |
+| Privacy and offline value | Photos and queries remain client-side, and the native-Arm recording completes a different correct search after its uncached network probe is blocked. |
+| Reproducible Arm execution | Public native Arm64 Chromium and Neoverse-N2 runs record architecture, hashes, controls, dispersion, quality, and the complete production-browser flow. Cobalt is the public measurement host—not a runtime service used by the app. |
 
 ## Project overview
 
@@ -50,6 +63,10 @@ Unlike an on-device concept with a single timing, Pinhole ships reproducible Arm
 comparisons, strong controls, raw samples, and a correctness gate for every speed
 or size claim. It is a finished, one-click demo, not a benchmark wrapped around a
 hypothetical product.
+
+Pinhole should win because its measured Arm optimization, finished private
+client experience, and reusable optimization kit are one coherent result: the
+engineering improvement is exactly what makes the human value possible.
 
 Pinhole was created on August 12, 2026, inside the June 10–August 14 hackathon
 period. Its complete public commit history records the implementation,
@@ -243,9 +260,9 @@ npm run dev
 ### Validate the implementation
 
 ```bash
-npm run verify
+npm run verify:submission
 
-# Requires a running dev server and Chrome
+# Targeted checks below require a running dev server and Chrome
 node tools/browser-smoke.mjs
 node tools/browser-flow.mjs
 node tools/browser-offline.mjs

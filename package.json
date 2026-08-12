@@ -14,6 +14,7 @@
     "coverage": "vitest run --coverage",
     "verify": "npm run lint && npm test && npm run build",
     "verify:static-isolation": "node tools/verify-static-isolation.mjs",
+    "verify:submission": "npm run verify && npm run verify:static-isolation",
     "benchmark:browser-model": "node tools/benchmark-browser-model.mjs",
     "benchmark:index": "node tools/benchmark-index.mjs"
   },

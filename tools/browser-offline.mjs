@@ -1,12 +1,9 @@
 import { mkdir } from 'node:fs/promises'
 import { chromium } from 'playwright-core'
+import { browserExecutablePath } from './browser-executable.mjs'
 
 const target = process.env.PINHOLE_URL ?? 'https://tauil-abd-elilah.github.io/pinhole-ai/'
-const executablePath =
-  process.env.CHROME_PATH ??
-  (process.platform === 'win32'
-    ? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
-    : chromium.executablePath())
+const executablePath = browserExecutablePath()
 const browser = await chromium.launch({ executablePath, headless: true })
 const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true })
 const page = await context.newPage()

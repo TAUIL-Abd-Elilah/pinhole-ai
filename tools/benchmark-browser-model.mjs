@@ -3,6 +3,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { chromium } from 'playwright-core'
+import { browserExecutablePath } from './browser-executable.mjs'
 
 const target = process.env.PINHOLE_URL ?? 'http://127.0.0.1:5173'
 const baselinePath = resolve(process.env.PINHOLE_BASELINE_MODEL ?? '.cache/models/tinyclip-int8.onnx')
@@ -11,11 +12,7 @@ const expectedBaselineHash = '844d1a46ab18acf50c989e541b12fe3b6dc7f8d6004725b4e9
 const outputArgument = process.argv.find((argument) => argument.startsWith('--output='))?.slice(9)
 const samples = Number(process.env.PINHOLE_BROWSER_BENCH_SAMPLES ?? 30)
 const warmup = Number(process.env.PINHOLE_BROWSER_BENCH_WARMUP ?? 7)
-const executablePath =
-  process.env.CHROME_PATH ??
-  (process.platform === 'win32'
-    ? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
-    : chromium.executablePath())
+const executablePath = browserExecutablePath()
 
 async function artifact(path) {
   const bytes = await readFile(path)

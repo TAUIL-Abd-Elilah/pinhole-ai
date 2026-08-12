@@ -32,8 +32,14 @@ or run the complete local quality gate with one command:
 
 ```bash
 npm ci
-npm run verify
+npm run verify:submission
 ```
+
+`verify:submission` builds the production PWA, runs lint and unit tests, then
+launches Chrome against a headerless static server and exercises model loading,
+the 12-photo semantic-search path, accessibility, query caching, cross-origin
+isolation, an uncached blocked-network probe, offline reload, and persisted local
+search. It fails on a wrong result or any unexpected browser error.
 
 The native Arm64 browser proof, exact model hashes, benchmark methodology, and
 quality guards are linked directly below; no account or special hardware is
@@ -233,19 +239,22 @@ equivalent signed-INT8 scalar control against the WASM batch kernel on the
 identical quantized corpus, so the SIMD contribution is separable from the 74.8%
 storage reduction.
 
-## Reuse the pattern
+## Reuse the optimization kit
 
 Pinhole's useful output is not limited to this interface. The extracted
 exact-parity encoders, compact-vector format, single-call SIMD scan, benchmark
 schemas, and quality gates are all inspectable artifacts. The
-[porting guide](docs/PORTING.md) maps each piece to its source file and gives a
-step-by-step recipe for adapting the hot-path/cold-path split to another
-multimodal retrieval application.
+[on-device retrieval optimization kit](docs/PORTING.md) maps each piece to its
+source file and gives a step-by-step recipe for adapting the hot-path/cold-path
+split to another multimodal retrieval application.
 
 ## Validate the claims
 
 ```bash
 npm ci
+npm run verify:submission # complete judge gate; requires Chrome
+
+# Faster targeted checks
 npm run verify        # lint + unit tests + TypeScript + production PWA
 node tools/browser-smoke.mjs  # needs local Chrome and a running dev server
 node tools/browser-flow.mjs   # model load → 12-photo index → semantic search

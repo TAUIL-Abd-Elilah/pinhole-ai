@@ -2,13 +2,10 @@ import { mkdir, writeFile } from 'node:fs/promises'
 import { dirname } from 'node:path'
 import { chromium } from 'playwright-core'
 import axe from 'axe-core'
+import { browserExecutablePath } from './browser-executable.mjs'
 
 const target = process.env.PINHOLE_URL ?? 'http://127.0.0.1:5173'
-const executablePath =
-  process.env.CHROME_PATH ??
-  (process.platform === 'win32'
-    ? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
-    : chromium.executablePath())
+const executablePath = browserExecutablePath()
 const viewport = {
   width: Number(process.env.PINHOLE_VIEWPORT_WIDTH ?? 1440),
   height: Number(process.env.PINHOLE_VIEWPORT_HEIGHT ?? 1000),

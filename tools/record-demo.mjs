@@ -1,12 +1,9 @@
 import { mkdir } from 'node:fs/promises'
 import { chromium } from 'playwright-core'
+import { browserExecutablePath } from './browser-executable.mjs'
 
 const target = process.env.PINHOLE_URL ?? 'http://127.0.0.1:5173'
-const executablePath =
-  process.env.CHROME_PATH ??
-  (process.platform === 'win32'
-    ? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
-    : chromium.executablePath())
+const executablePath = browserExecutablePath()
 const output = process.env.PINHOLE_VIDEO ?? '.cache/video/pinhole-demo.webm'
 const videoDirectory = '.cache/video/playwright'
 const viewport = { width: 1280, height: 720 }

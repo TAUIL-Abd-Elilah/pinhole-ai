@@ -1,10 +1,15 @@
-# Reuse Pinhole's on-device retrieval pattern
+# Pinhole on-device retrieval optimization kit
 
 Pinhole is one implementation of a broader optimization pattern: separate work
 performed once from work performed for every query, persist the smallest useful
 representation, and cross the JavaScript-to-WebAssembly boundary once per scan.
 This guide maps the reusable parts and the correctness checks needed to adapt
 them to another multimodal search product.
+
+The kit is deliberately source-first: an exact-parity ONNX graph extractor, a
+compact signed-INT8 vector format, a 434-byte batched WASM SIMD kernel, native
+and browser Arm benchmark harnesses, real-input retrieval gates, and this porting
+recipe. Each component can be adopted independently under the MIT license.
 
 ## When the pattern fits
 

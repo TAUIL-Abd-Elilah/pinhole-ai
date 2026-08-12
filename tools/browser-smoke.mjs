@@ -1,13 +1,10 @@
 import { mkdir } from 'node:fs/promises'
 import { chromium } from 'playwright-core'
+import { browserExecutablePath } from './browser-executable.mjs'
 
 const target = process.env.PINHOLE_URL ?? 'http://127.0.0.1:5173'
 const timeout = Number(process.env.PINHOLE_SMOKE_TIMEOUT ?? 120_000)
-const executablePath =
-  process.env.CHROME_PATH ??
-  (process.platform === 'win32'
-    ? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
-    : chromium.executablePath())
+const executablePath = browserExecutablePath()
 const browser = await chromium.launch({ executablePath, headless: true })
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 })
 const errors = []

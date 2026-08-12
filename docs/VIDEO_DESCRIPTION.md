@@ -28,6 +28,11 @@ isolation and offline checks, screenshots, raw JSON, and a log that explicitly
 confirms the WASM SIMD path:
 https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31648817286
 
+Cobalt is the reproducible Arm measurement and recording host—not an inference
+service used by Pinhole. The deployed product has no application backend: when
+opened on an Arm phone, tablet, or laptop, inference and private data remain in
+that client browser.
+
 Measured on a real Arm Neoverse-N2 runner:
 - 9.76x faster text queries in the shipped Chromium/WASM runtime
 - 15.44x faster signed-INT8 scan than the identical scalar control
@@ -40,6 +45,9 @@ Measured on a real Arm Neoverse-N2 runner:
 
 Committed raw browser, native model, index, and retrieval JSON:
 https://github.com/TAUIL-Abd-Elilah/pinhole-ai/tree/main/bench/results/cobalt-31625513958
+
+Reusable graph extraction, compact-vector, SIMD, benchmark, and quality-gate kit:
+https://github.com/TAUIL-Abd-Elilah/pinhole-ai/blob/main/docs/PORTING.md
 
 Built for the Arm Create: AI Optimization Challenge 2026, Mobile AI track.
 

@@ -1,12 +1,9 @@
 import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { chromium } from 'playwright-core'
+import { browserExecutablePath } from './browser-executable.mjs'
 
-const executablePath =
-  process.env.CHROME_PATH ??
-  (process.platform === 'win32'
-    ? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
-    : chromium.executablePath())
+const executablePath = browserExecutablePath()
 const output = process.env.PINHOLE_COVER ?? 'docs/media/pinhole-cover.png'
 const asDataUrl = async (path, type) =>
   `data:${type};base64,${(await readFile(resolve(path))).toString('base64')}`

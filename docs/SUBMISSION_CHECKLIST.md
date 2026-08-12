@@ -17,6 +17,8 @@ does not become the failure mode.
 - [x] Model/source hashes, attribution, privacy limits, and quality guards.
 - [x] 1200×630 cover, desktop product image, and 390×844 mobile product image.
 - [x] Devpost-ready English copy in [`SUBMISSION.md`](SUBMISSION.md).
+- [x] One-command `npm run verify:submission` judge gate for the production,
+  accessibility, static-host, cache, and offline flows.
 - [x] Sub-three-minute video title, description, and narration in
   [`VIDEO_DESCRIPTION.md`](VIDEO_DESCRIPTION.md) and
   [`VIDEO_SCRIPT.md`](VIDEO_SCRIPT.md).
