@@ -64,10 +64,20 @@
 .aperture-mark i:nth-child(6) { transform: rotate(300deg); }
 
 .challenge-label {
+  width: fit-content;
+  padding: 4px 0;
+  border-bottom: 1px solid transparent;
+  color: var(--ink);
   font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
   letter-spacing: 0.12em;
+  text-decoration: none;
   text-transform: uppercase;
+  transition: border-color 160ms ease;
+}
+
+.challenge-label:hover {
+  border-color: currentColor;
 }
 
 .engine-state {

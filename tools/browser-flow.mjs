@@ -46,6 +46,7 @@ try {
   )
 
   const topResult = await page.locator('.photo-card').first().locator('figcaption span').innerText()
+  const runtime = await page.locator('.privacy-proof small').innerText()
   await page.waitForTimeout(900)
   await mkdir('.cache', { recursive: true })
   await page.screenshot({
@@ -59,6 +60,7 @@ try {
         photoCount: await page.locator('.photo-card').count(),
         metrics: await page.locator('.instrument-strip dd').allInnerTexts(),
         engine: await page.locator('.engine-state').innerText(),
+        runtime,
         viewport,
         screenshotPath,
         errors,
@@ -69,6 +71,9 @@ try {
   )
   if (!topResult.toLowerCase().includes('golden dog')) {
     throw new Error(`Unexpected top result: ${topResult}`)
+  }
+  if (!runtime.toLowerCase().includes('wasm simd')) {
+    throw new Error(`Expected the WASM SIMD search path, received: ${runtime}`)
   }
   if (errors.length > 0) process.exitCode = 1
 } finally {

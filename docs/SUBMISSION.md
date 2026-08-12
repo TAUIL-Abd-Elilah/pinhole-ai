@@ -10,6 +10,7 @@
 - **License:** MIT
 - **Arm evidence:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31557654775
 - **Native Arm browser proof:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31558535128
+- **Native Arm demo footage:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31559237252
 
 ## Project overview
 
@@ -33,6 +34,10 @@ Pinhole should win because the optimization is inseparable from the human value:
 less computation, memory, and network dependence are exactly what let personal
 photos remain personal. It is a finished, one-click demo, not a benchmark wrapped
 around a hypothetical product.
+
+Pinhole was created on August 12, 2026, inside the June 10–August 14 hackathon
+period. Its complete public commit history records the implementation,
+benchmark, native-browser, offline, media, and documentation milestones.
 
 ## Functionality and output
 
@@ -107,7 +112,9 @@ not relabel that conversion as original work. Pinhole contributes:
 - an explicit browser privacy boundary and threat model.
 
 The extraction pattern and compact exact-scan kernel can be reused by other
-on-device multimodal retrieval apps, not only photo search.
+on-device multimodal retrieval apps, not only photo search. A dedicated
+[porting guide](PORTING.md) identifies the reuse seams and gives other developers
+an adoption and measurement checklist.
 
 ## Setup and validation
 
@@ -137,9 +144,7 @@ npm run dev
 ### Validate the implementation
 
 ```bash
-npm run lint
-npm test
-npm run build
+npm run verify
 
 # Requires a running dev server and Chrome
 node tools/browser-smoke.mjs

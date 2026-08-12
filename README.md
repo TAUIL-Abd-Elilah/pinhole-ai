@@ -15,11 +15,25 @@ Built for the **Arm Create: AI Optimization Challenge 2026 — Mobile AI track**
 
 ![Pinhole private semantic photo search with measured Arm optimization results](docs/media/pinhole-cover.png)
 
-## Try it
+## Judge it in 90 seconds
 
 **[Open the live PWA](https://tauil-abd-elilah.github.io/pinhole-ai/)**, choose
 **Load demo roll**, and search for `golden dog in the snow`. The complete path
 runs in the browser; no backend or API key is involved.
+
+Then inspect the [raw Arm benchmark JSON](bench/results/cobalt-31557654775/)
+or run the complete local quality gate with one command:
+
+```bash
+npm ci
+npm run verify
+```
+
+The native Arm64 browser proof, exact model hashes, benchmark methodology, and
+quality guards are linked directly below; no account or special hardware is
+needed to evaluate the hosted product.
+
+## Run it locally
 
 To run it locally:
 
@@ -144,13 +158,20 @@ deployments use up to four WASM threads; other hosts retain SIMD with one thread
 The custom vector kernel has a scalar TypeScript fallback and signed-INT8 parity
 tests, including non-multiple-of-16 tails.
 
+## Reuse the pattern
+
+Pinhole's useful output is not limited to this interface. The extracted
+exact-parity encoders, compact-vector format, single-call SIMD scan, benchmark
+schemas, and quality gates are all inspectable artifacts. The
+[porting guide](docs/PORTING.md) maps each piece to its source file and gives a
+step-by-step recipe for adapting the hot-path/cold-path split to another
+multimodal retrieval application.
+
 ## Validate the claims
 
 ```bash
 npm ci
-npm run lint          # static checks
-npm test              # quantization + SIMD parity
-npm run build         # TypeScript, production app, PWA
+npm run verify        # lint + unit tests + TypeScript + production PWA
 node tools/browser-smoke.mjs  # needs local Chrome and a running dev server
 node tools/browser-flow.mjs   # model load → 12-photo index → semantic search
 node tools/browser-offline.mjs # cache → force network offline → reload → search

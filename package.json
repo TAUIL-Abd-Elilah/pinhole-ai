@@ -12,6 +12,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "coverage": "vitest run --coverage",
+    "verify": "npm run lint && npm test && npm run build",
     "benchmark:index": "node tools/benchmark-index.mjs"
   },
   "dependencies": {

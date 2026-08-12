@@ -43,6 +43,7 @@ function PhotoCard({
   onRemove: (id: string) => void
 }) {
   const percentage = photo.score === undefined ? null : Math.max(0, Math.min(99, photo.score * 100))
+  const accessibleName = photo.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ')
   return (
     <figure
       className="photo-card"
@@ -51,7 +52,7 @@ function PhotoCard({
       style={{ '--rank-delay': `${Math.min(rank, 18) * 28}ms` } as React.CSSProperties}
     >
       <div className="photo-frame">
-        <img src={photo.url} alt={photo.name.replace(/[-_]/g, ' ')} />
+        <img src={photo.url} alt={accessibleName} />
         <button
           className="remove-photo"
           type="button"
@@ -115,8 +116,16 @@ function App() {
           <span className="aperture-mark" aria-hidden="true"><i /><i /><i /><i /><i /><i /></span>
           <span>pinhole</span>
         </a>
-        <div className="challenge-label">Arm Mobile AI · on-device</div>
-        <div className={`engine-state engine-state--${modelStatus}`}>
+        <a
+          className="challenge-label"
+          href="https://github.com/TAUIL-Abd-Elilah/pinhole-ai#measured-on-arm"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="View measured Arm64 optimization evidence"
+        >
+          Arm Mobile AI · evidence ↗
+        </a>
+        <div className={`engine-state engine-state--${modelStatus}`} role="status" aria-live="polite">
           <span />
           {modelLabel}
         </div>
@@ -219,7 +228,7 @@ function App() {
 
           <div className="privacy-proof">
             <div className="privacy-orbit" aria-hidden="true"><span /></div>
-            <p><strong>{formatBytes(metrics.avoidedUploadBytes)}</strong> kept off the network</p>
+            <p><strong>{formatBytes(metrics.avoidedUploadBytes)}</strong> not sent to an AI API</p>
             <small>INT8 TinyCLIP · {metrics.backend.replace('-', ' ')} · IndexedDB only</small>
           </div>
         </aside>
