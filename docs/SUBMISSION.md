@@ -10,7 +10,7 @@
 - **License:** MIT
 - **Final Arm evidence:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31625513958
 - **Committed raw evidence:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/tree/main/bench/results/cobalt-31625513958
-- **Native Arm demo footage:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31634280630
+- **Native Arm demo footage:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31646299070
 
 ## Project overview
 
@@ -69,6 +69,12 @@ The deployed product is also measured as a product: a dated Lighthouse 12.8.2
 mobile snapshot scored **97 Performance and 100 Accessibility / Best Practices /
 SEO**. The stronger full-flow gate then loaded the model, indexed and searched
 the real-photo roll, and found zero WCAG 2 A/AA violations after results settled.
+
+The 63-second native-Arm product recording makes the privacy boundary visible:
+after the first result, its harness forces browser networking offline, runs a
+different query, asserts that “coffee on an open book” ranks first, and records
+the result under an explicit offline badge. The recording fails if the browser
+remains online, the result is wrong, or a console/request error appears.
 
 A fresh-profile audit of the deployed full-demo path also measures mobile
 delivery: the two split models, ORT loader/runtime, and custom kernel total
@@ -208,10 +214,12 @@ COEP does not break a third-party dependency. The one-time reload is deliberate,
 and the status pill always reports the thread count actually in use.
 
 Public Arm64 run
-[`31634280630`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31634280630)
+[`31646299070`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31646299070)
 tests that static-host path without server headers, asserts cross-origin
 isolation and repeated-query cache correctness, then forces the browser offline,
-reloads, and completes another search with zero request or console errors.
+reloads, and completes another search with zero request or console errors. The
+same run records the judge-facing demo in native Arm64 Chromium and independently
+forces networking offline before its second successful search.
 
 ### Build from source
 

@@ -17,8 +17,8 @@ the entrant and should be edited wherever they do not match their experience.
   [`SUBMISSION.md`](SUBMISSION.md), preserving the benchmark table and links.
 - **Video title and description:** use [`VIDEO_DESCRIPTION.md`](VIDEO_DESCRIPTION.md).
 - **Primary image:** `media/pinhole-cover.png`
-- **Additional images:** `media/pinhole-mobile.png`, then
-  `media/pinhole-search.png`
+- **Additional images:** `media/pinhole-mobile.png`,
+  `media/pinhole-offline-proof.png`, then `media/pinhole-search.png`
 
 ## Built with
 

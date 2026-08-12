@@ -39,9 +39,13 @@ The native Arm64 browser proof, exact model hashes, benchmark methodology, and
 quality guards are linked directly below; no account or special hardware is
 needed to evaluate the hosted product.
 
-The latest [public Arm64 quality run](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31634280630)
+The latest [public Arm64 quality run](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31646299070)
 also proves the headerless static-host isolation path, exact query-cache reuse,
-and a forced-offline reload/search—not only a development-server happy path.
+and a forced-offline reload/search—not only a development-server happy path. Its
+native-Arm recorder then disables browser networking, searches a second phrase,
+asserts the correct result, and fails on any request or console error.
+
+![Pinhole ranks coffee first while browser networking is forced offline](docs/media/pinhole-offline-proof.png)
 
 The deployed experience is measured too: a dated Lighthouse 12.8.2 mobile
 snapshot scored **97 Performance and 100 Accessibility / Best Practices / SEO**,

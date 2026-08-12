@@ -11,6 +11,8 @@ does not become the failure mode.
 - [x] Mobile AI track named consistently in the app, README, and write-up.
 - [x] Raw repeatable Arm64 benchmark JSON with host, Chromium, and workflow identity.
 - [x] Native Arm64 Chromium product flow, responsive screenshot, and demo footage.
+- [x] Native Arm64 video visibly forces browser networking offline and asserts a
+  correct second search with zero request/console errors.
 - [x] Model/source hashes, attribution, privacy limits, and quality guards.
 - [x] 1200×630 cover, desktop product image, and 390×844 mobile product image.
 - [x] Devpost-ready English copy in [`SUBMISSION.md`](SUBMISSION.md).
@@ -40,11 +42,15 @@ does not become the failure mode.
 - [ ] Use `.cache/final-submission/Pinhole-video-thumbnail-1280x720.png` as the video
   thumbnail and optionally upload `Pinhole-demo-en.srt` as English captions.
 - [ ] Upload `media/pinhole-cover.png` first, followed by
-  `media/pinhole-mobile.png` and `media/pinhole-search.png`.
+  `media/pinhole-mobile.png`, `media/pinhole-offline-proof.png`, and
+  `media/pinhole-search.png`.
 - [ ] State that the project was created August 12, 2026, during the submission
   period; the public commit history is the evidence.
 - [ ] Preview every link in a signed-out/private browser window.
 - [ ] Submit, then reopen the project page and confirm it appears as submitted.
+- [ ] After submission, optionally use [`SHARE_COPY.md`](SHARE_COPY.md) for one
+  evidence-first Arm community post; replace both URL placeholders and follow
+  the channel's self-promotion rules.
 
 ## Final smoke path
 
