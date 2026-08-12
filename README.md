@@ -145,11 +145,14 @@ npm test              # quantization + SIMD parity
 npm run build         # TypeScript, production app, PWA
 node tools/browser-smoke.mjs  # needs local Chrome and a running dev server
 node tools/browser-flow.mjs   # model load → 12-photo index → semantic search
+node tools/browser-offline.mjs # cache → force network offline → reload → search
 ```
 
 The full browser flow asserts that `golden dog in the snow` ranks the dog first,
 captures live timing metrics, fails on console/request errors, and saves the same
-screen shown above.
+screen shown above. The offline flow first proves an uncached request is blocked,
+then reloads the service-worker-controlled live PWA and finds a second photo from
+the persisted local index.
 
 ## Privacy boundary
 

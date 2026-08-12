@@ -135,12 +135,18 @@ npm run build
 # Requires a running dev server and Chrome
 node tools/browser-smoke.mjs
 node tools/browser-flow.mjs
+node tools/browser-offline.mjs
 ```
 
 To reproduce the exact model split and native Arm benchmark, follow
 [`bench/README.md`](../bench/README.md). The public workflow runs the complete
 quality suite on x64 and all three benchmark/quality harnesses on
 `ubuntu-24.04-arm`.
+
+The offline harness warms the hosted application, indexes and searches the demo
+roll, forces the browser network offline, verifies that an uncached probe is
+blocked, reloads under service-worker control, and successfully performs a
+second local search with no console or request errors.
 
 ## Challenges and learning
 
