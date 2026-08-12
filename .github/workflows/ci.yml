@@ -48,6 +48,8 @@ jobs:
           node -p "JSON.stringify({arch: process.arch, platform: process.platform, cpus: require('os').cpus()}, null, 2)"
       - name: Benchmark exact-parity model split
         run: python tools/benchmark_model.py --samples 50 --warmup 7 --output bench-artifacts/model-cobalt.json
+      - name: Validate real-photo retrieval quality
+        run: node tools/benchmark-retrieval.mjs --output=bench-artifacts/retrieval-cobalt.json
       - name: Benchmark SIMD compact index
         run: node tools/benchmark-index.mjs --output=bench-artifacts/index-cobalt.json
       - uses: actions/upload-artifact@v4

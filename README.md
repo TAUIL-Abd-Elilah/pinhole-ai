@@ -17,7 +17,11 @@ Built for the **Arm Create: AI Optimization Challenge 2026 — Mobile AI track**
 
 ## Try it
 
-The fastest judge path takes about a minute:
+**[Open the live PWA](https://tauil-abd-elilah.github.io/pinhole-ai/)**, choose
+**Load demo roll**, and search for `golden dog in the snow`. The complete path
+runs in the browser; no backend or API key is involved.
+
+To run it locally:
 
 ```bash
 git clone https://github.com/TAUIL-Abd-Elilah/pinhole-ai.git
@@ -56,9 +60,26 @@ revision and SHA-256, extracts the two independent ONNX subgraphs, and verifies
 **bit-for-bit equality** for text and image embeddings. Generated artifact hashes
 live in [`pinhole-manifest.json`](public/models/pinhole-tinyclip/pinhole-manifest.json).
 
-## Evidence, not slogans
+## Measured on Arm
 
-Two benchmark harnesses run on the repository's Arm64 GitHub runner:
+The committed benchmark run executed on a real 4-core **Arm Neoverse-N2
+(Microsoft Cobalt 100)** GitHub runner (`ubuntu-24.04-arm`, run
+[`31557261642`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31557261642)).
+These are medians, not best runs:
+
+| Optimization | Arm baseline | Pinhole | Result | Quality guard |
+|---|---:|---:|---:|---|
+| Text query, 1 thread | combined graph 45.68 ms | split text graph 4.03 ms | **11.35x faster** | bit-for-bit equal |
+| Text query, 4 threads | combined graph 15.46 ms | split text graph 1.76 ms | **8.80x faster** | bit-for-bit equal |
+| 10k-vector exact scan | Float32 JS 12.44 ms | INT8 WASM SIMD 3.51 ms | **3.54x faster** | 99.6% mean Recall@10; 100% Top-1 agreement |
+| 10k-vector index | 20.48 MB | 5.16 MB | **74.8% smaller** | same quality run |
+
+The raw JSON retains all 50 model samples / 25 search queries, p95, min/max,
+MAD, exact model hashes, environment, and Actions identity. See the
+[`committed evidence`](bench/results/cobalt-31557261642/) and
+[methodology](bench/README.md).
+
+Three benchmark harnesses reproduce the claims:
 
 ```bash
 # Exact-parity combined graph vs split graphs
@@ -70,18 +91,19 @@ python tools/benchmark_model.py --samples 50 --warmup 7
 # Float32 scalar index vs INT8 WebAssembly SIMD index
 npm run build:wasm
 npm run benchmark:index
+
+# End-task quality on the attributed demonstration roll
+node tools/benchmark-retrieval.mjs
 ```
 
-The workflow records architecture, CPU description, runtime versions, warm-up,
-sample count, median, p95, min/max, MAD, output parity, Recall@10, and top-1
-agreement. It also includes a strong control: requesting only `text_embeds` from
-the unsplit raw ONNX session. On the local development control, ONNX Runtime still
-scheduled the combined graph; the extracted text graph was 13–14× faster with
-exact output parity. Those x64 figures are deliberately **not** presented as Arm
-results. Traceable Arm measurements are committed under [`bench/results`](bench/results/)
-after the Cobalt workflow completes.
+The model harness includes a strong control: it requests only `text_embeds` from
+the unsplit raw ONNX session. ONNX Runtime still scheduled the combined graph on
+Arm (45.67 ms at one thread), while Pinhole's extracted text graph took 4.03 ms.
+That rules out the misleading comparison where a baseline needlessly fetches
+outputs that the runtime could otherwise prune.
 
-See [benchmark methodology](bench/README.md) and [optimization details](docs/OPTIMIZATION.md).
+See [optimization details](docs/OPTIMIZATION.md) for the graph surgery, compact
+embedding format, SIMD design, and measurement policy.
 
 ## Architecture
 
