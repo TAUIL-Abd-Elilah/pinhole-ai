@@ -133,9 +133,18 @@ async function runBenchmark() {
   await combinedLoad.session.release()
   await splitLoad.session.release()
 
+  const userAgentData = navigator.userAgentData?.getHighEntropyValues
+    ? await navigator.userAgentData.getHighEntropyValues([
+        'architecture',
+        'bitness',
+        'fullVersionList',
+        'platformVersion',
+      ])
+    : null
   const result = {
     runtime: {
       user_agent: navigator.userAgent,
+      user_agent_data: userAgentData,
       hardware_concurrency: navigator.hardwareConcurrency,
       cross_origin_isolated: crossOriginIsolated,
       wasm_threads: threads,

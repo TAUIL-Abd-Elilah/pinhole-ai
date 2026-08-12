@@ -65,6 +65,11 @@ try {
     schema: 'pinhole-browser-model-benchmark/v1',
     created_utc: new Date().toISOString(),
     browser: await browser.version(),
+    host: {
+      platform: process.platform,
+      architecture: process.arch,
+      node: process.version,
+    },
     artifacts: {
       combined: baselineArtifact,
       split_text: splitArtifact,
