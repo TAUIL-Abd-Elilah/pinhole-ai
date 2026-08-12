@@ -1,4 +1,4 @@
-import { useRef, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import './App.css'
 import { usePinhole, type DisplayPhoto } from './hooks/usePinhole.ts'
 
@@ -73,6 +73,7 @@ function PhotoCard({
 function App() {
   const inputRef = useRef<HTMLInputElement>(null)
   const contactSheetRef = useRef<HTMLElement>(null)
+  const [isOnline, setIsOnline] = useState(() => navigator.onLine)
   const {
     photos,
     modelStatus,
@@ -93,6 +94,16 @@ function App() {
     clearPhotos,
   } = usePinhole()
 
+  useEffect(() => {
+    const updateNetworkState = () => setIsOnline(navigator.onLine)
+    window.addEventListener('online', updateNetworkState)
+    window.addEventListener('offline', updateNetworkState)
+    return () => {
+      window.removeEventListener('online', updateNetworkState)
+      window.removeEventListener('offline', updateNetworkState)
+    }
+  }, [])
+
   const submitSearch = (event: FormEvent) => {
     event.preventDefault()
     void search().then(() => {
@@ -104,10 +115,13 @@ function App() {
 
   const modelLabel =
     modelStatus === 'ready'
-      ? `Local AI ready · ${metrics.threads ?? 1} thread${metrics.threads === 1 ? '' : 's'}`
+      ? isOnline
+        ? `Local AI ready · ${metrics.threads ?? 1} thread${metrics.threads === 1 ? '' : 's'}`
+        : 'Offline · local search active'
       : modelStatus === 'error'
         ? 'Local AI needs attention'
         : `Loading ${modelProgress.file} · ${modelProgress.progress.toFixed(0)}%`
+  const offlineReady = !isOnline && modelStatus === 'ready'
 
   return (
     <main className="app-shell">
@@ -125,7 +139,16 @@ function App() {
         >
           Arm Mobile AI · evidence ↗
         </a>
-        <div className={`engine-state engine-state--${modelStatus}`} role="status" aria-live="polite">
+        <div
+          className={`engine-state engine-state--${offlineReady ? 'offline' : modelStatus}`}
+          role="status"
+          aria-live="polite"
+          title={
+            offlineReady
+              ? `Browser networking is unavailable; local AI remains active with ${metrics.threads ?? 1} thread${metrics.threads === 1 ? '' : 's'}`
+              : undefined
+          }
+        >
           <span />
           {modelLabel}
         </div>

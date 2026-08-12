@@ -7,8 +7,9 @@ channels where project sharing is allowed.
 ## Arm Developer Program community / Discord
 
 I built **Pinhole**, a private semantic photo-search PWA for the Arm Mobile AI
-track. Photos, queries, and inference stay in the browser; the demo visibly
-forces browser networking offline before a second search succeeds.
+track. Photos, queries, and inference stay in the browser; the demo forces
+networking offline, the product reports **Offline · local search active**, and a
+second search succeeds.
 
 The optimization is measured on native Arm64 Chromium / Neoverse-N2:
 
@@ -51,5 +52,6 @@ Source, raw Arm64 measurements, model hashes, correctness gates, and the SIMD
 kernel: https://github.com/TAUIL-Abd-Elilah/pinhole-ai
 
 The second search in this video is executed after the recorder forces browser
-networking offline. No photo, query, thumbnail, or embedding is sent to an
-inference API.
+networking offline and confirms an uncached probe is blocked. Pinhole itself
+reports **Offline · local search active**. No photo, query, thumbnail, or
+embedding is sent to an inference API.

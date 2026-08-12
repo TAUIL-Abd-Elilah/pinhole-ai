@@ -9,6 +9,13 @@ Pinhole — Private on-device photo search optimized for Arm
 Live PWA: https://tauil-abd-elilah.github.io/pinhole-ai/
 Source + reproducible evidence: https://github.com/TAUIL-Abd-Elilah/pinhole-ai
 
+Chapters:
+0:00 Private on-device search
+0:13 Find a photo by meaning
+0:25 Measured Arm optimization
+0:35 Forced-offline search proof
+0:45 Privacy, source, and evidence
+
 Pinhole finds a photo from a natural-language memory without uploading the
 camera roll. TinyCLIP inference, compact indexing, and search all run locally in
 the browser on Arm-powered client devices. In the video, the browser network is
@@ -40,3 +47,5 @@ The video contains no music. Demonstration photographs are used under CC0,
 CC BY, and CC BY-SA licenses. Full creator, source, modification, and license
 attribution:
 https://github.com/TAUIL-Abd-Elilah/pinhole-ai/blob/main/public/demo/ATTRIBUTION.md
+
+#ArmAI #OnDeviceAI #WebAssembly

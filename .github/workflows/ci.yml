@@ -89,5 +89,6 @@ jobs:
             .cache/pinhole-browser-arm.png
             .cache/pinhole-isolated-local.png
             .cache/pinhole-offline.png
+            .cache/pinhole-offline-state.png
             .cache/video/pinhole-demo-arm.webm
           if-no-files-found: error

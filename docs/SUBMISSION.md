@@ -12,6 +12,15 @@
 - **Committed raw evidence:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/tree/main/bench/results/cobalt-31625513958
 - **Native Arm demo footage:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31646299070
 
+## Judge evidence map
+
+| Criterion | Fastest evidence |
+|---|---|
+| Technological implementation | Exact-parity ONNX graph split, lazy modality loading, compact INT8 index, and a 434-byte signed-INT8 WASM SIMD kernel; all headline comparisons have controls and correctness gates. |
+| WOW factor | One-click semantic photo search, followed in the 63-second demo by a second correct search while the product reports **Offline · local search active**. |
+| Impact | Personal photos and queries stay out of an inference API; the compact index uses **74.8% less memory**, and the demo accounts for photo bytes not uploaded. |
+| Developer experience | Public PWA, MIT source, pinned model hashes, raw Arm64 JSON, CI browser artifacts, benchmark instructions, and a reusable porting guide. |
+
 ## Project overview
 
 Your camera roll should not have to leave your phone to become searchable.
@@ -73,8 +82,9 @@ the real-photo roll, and found zero WCAG 2 A/AA violations after results settled
 The 63-second native-Arm product recording makes the privacy boundary visible:
 after the first result, its harness forces browser networking offline, runs a
 different query, asserts that “coffee on an open book” ranks first, and records
-the result under an explicit offline badge. The recording fails if the browser
-remains online, the result is wrong, or a console/request error appears.
+the result under the product's own **Offline · local search active** status. The
+recording fails if an uncached network probe succeeds, the result is wrong, or a
+console/request error appears.
 
 A fresh-profile audit of the deployed full-demo path also measures mobile
 delivery: the two split models, ORT loader/runtime, and custom kernel total

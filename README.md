@@ -42,8 +42,9 @@ needed to evaluate the hosted product.
 The latest [public Arm64 quality run](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31646299070)
 also proves the headerless static-host isolation path, exact query-cache reuse,
 and a forced-offline reload/search—not only a development-server happy path. Its
-native-Arm recorder then disables browser networking, searches a second phrase,
-asserts the correct result, and fails on any request or console error.
+native-Arm recorder then disables browser networking, confirms an uncached probe
+is blocked, waits for the product's **Offline · local search active** status,
+searches a second phrase, and asserts the correct result.
 
 ![Pinhole ranks coffee first while browser networking is forced offline](docs/media/pinhole-offline-proof.png)
 

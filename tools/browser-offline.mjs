@@ -53,6 +53,16 @@ try {
 
   errors.length = 0
   await context.setOffline(true)
+  await page.waitForFunction(
+    () => document.querySelector('.engine-state--offline')?.textContent?.includes('local search active'),
+    undefined,
+    { timeout: 10_000 },
+  )
+  const offlineStateBeforeReload = await page.locator('.engine-state--offline').innerText()
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }))
+  await page.waitForTimeout(150)
+  await mkdir('.cache', { recursive: true })
+  await page.screenshot({ path: '.cache/pinhole-offline-state.png', fullPage: false })
   const networkProbeBlocked = await page.evaluate(async () => {
     try {
       const probe = new URL(`offline-probe-${Date.now()}.txt`, document.baseURI)
@@ -67,7 +77,6 @@ try {
   await waitForModel()
   const offlineTopResult = await searchFor('coffee on an open book')
   await page.waitForTimeout(700)
-  await mkdir('.cache', { recursive: true })
   await page.screenshot({ path: '.cache/pinhole-offline.png', fullPage: false })
 
   const result = {
@@ -79,6 +88,9 @@ try {
     controlledByServiceWorker: await page.evaluate(() => Boolean(navigator.serviceWorker?.controller)),
     crossOriginIsolated: await page.evaluate(() => globalThis.crossOriginIsolated),
     engine: await page.locator('.engine-state').innerText(),
+    offlineStateBeforeReload,
+    offlineStateAfterReload: await page.locator('.engine-state--offline').textContent().catch(() => null),
+    offlineStateScreenshot: '.cache/pinhole-offline-state.png',
     errors,
   }
   console.log(JSON.stringify(result, null, 2))
@@ -86,6 +98,7 @@ try {
   if (!onlineTopResult.toLowerCase().includes('golden dog')) process.exitCode = 1
   if (!offlineTopResult.toLowerCase().includes('coffee')) process.exitCode = 1
   if (!networkProbeBlocked || errors.length > 0) process.exitCode = 1
+  if (!offlineStateBeforeReload.toLowerCase().includes('local search active')) process.exitCode = 1
   if (process.env.PINHOLE_EXPECT_ISOLATED === 'true' && !result.crossOriginIsolated) {
     process.exitCode = 1
   }

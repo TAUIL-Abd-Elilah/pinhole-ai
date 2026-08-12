@@ -39,8 +39,9 @@ demo roll:
 2. Show Airplane mode turning on, then return directly to Pinhole.
 3. Reload or reopen the installed PWA and search a new phrase such as
    `coffee on an open book`.
-4. Hold on the correct first result, the live thread-count pill, and the
-   instrument strip for several seconds.
+4. Hold on the correct first result, the **Offline · local search active** pill,
+   and the instrument strip for several seconds. Capture the online thread count
+   before turning on Airplane mode.
 
 This proves the product claim more clearly than another benchmark screenshot.
 Use only the public demo roll, and do not expose the notification shade longer

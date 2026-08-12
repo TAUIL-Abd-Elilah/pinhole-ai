@@ -107,6 +107,24 @@
   box-shadow: 0 0 0 4px rgba(237, 101, 71, 0.13);
 }
 
+.engine-state--offline {
+  padding: 9px 12px;
+  border: 1px solid rgba(220, 231, 232, 0.32);
+  border-radius: 999px;
+  color: var(--paper);
+  background: var(--ink);
+  box-shadow: 0 10px 28px rgba(20, 40, 44, 0.18);
+  font: 500 10px/1 'IBM Plex Mono', monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.engine-state--offline > span {
+  flex: none;
+  background: var(--safelight);
+  box-shadow: 0 0 0 3px rgba(237, 101, 71, 0.2);
+}
+
 .workspace {
   display: grid;
   grid-template-columns: minmax(360px, 39%) minmax(0, 61%);
@@ -659,6 +677,12 @@
     font-size: 9px;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .engine-state--offline {
+    max-width: 210px;
+    padding: 8px 10px;
+    font-size: 8px;
   }
 
   .workspace {

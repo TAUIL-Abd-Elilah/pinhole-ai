@@ -23,6 +23,7 @@ const errors = []
 let firstResult = ''
 let offlineTopResult = ''
 let networkForcedOffline = false
+let networkProbeBlocked = false
 
 page.on('pageerror', (error) => errors.push(`page: ${error.message}`))
 page.on('console', (message) => {
@@ -132,33 +133,22 @@ async function enableOfflineProof() {
   await context.setOffline(true)
   networkForcedOffline = await page.evaluate(() => !navigator.onLine)
   if (!networkForcedOffline) throw new Error('Browser did not enter the forced-offline state')
-
-  await page.evaluate(() => {
-    if (!document.querySelector('#pinhole-offline-proof-style')) {
-      const style = document.createElement('style')
-      style.id = 'pinhole-offline-proof-style'
-      style.textContent = `
-        #pinhole-offline-proof {
-          position: fixed; top: 18px; right: 18px; z-index: 2147483000;
-          display: flex; align-items: center; gap: 9px; padding: 10px 13px;
-          border: 1px solid rgba(220,231,232,.32); border-radius: 999px;
-          color: #dce7e8; background: #14282c;
-          box-shadow: 0 10px 28px rgba(20,40,44,.22);
-          font: 500 10px/1 'IBM Plex Mono', monospace;
-          letter-spacing: .1em; text-transform: uppercase;
-        }
-        #pinhole-offline-proof::before {
-          content: ''; width: 8px; height: 8px; border-radius: 50%;
-          background: #ed6547; box-shadow: 0 0 0 3px rgba(237,101,71,.2);
-        }
-      `
-      document.head.append(style)
+  await page.waitForFunction(
+    () => document.querySelector('.engine-state--offline')?.textContent?.includes('local search active'),
+    undefined,
+    { timeout: 10_000 },
+  )
+  networkProbeBlocked = await page.evaluate(async () => {
+    try {
+      const probe = new URL(`offline-proof-${Date.now()}.txt`, document.baseURI)
+      await fetch(probe, { cache: 'no-store' })
+      return false
+    } catch {
+      return true
     }
-    const badge = document.createElement('div')
-    badge.id = 'pinhole-offline-proof'
-    badge.textContent = 'Browser network forced offline'
-    document.body.append(badge)
   })
+  if (!networkProbeBlocked) throw new Error('Uncached network probe succeeded while offline')
+  errors.length = 0
   await pause(650)
 }
 
@@ -270,10 +260,18 @@ try {
 
 console.log(
   JSON.stringify(
-    { output, firstResult, offlineTopResult, networkForcedOffline, errors },
+    {
+      output,
+      firstResult,
+      offlineTopResult,
+      networkForcedOffline,
+      networkProbeBlocked,
+      errors,
+    },
     null,
     2,
   ),
 )
 if (!offlineTopResult.toLowerCase().includes('coffee')) process.exitCode = 1
+if (!networkForcedOffline || !networkProbeBlocked) process.exitCode = 1
 if (errors.length > 0) process.exitCode = 1
