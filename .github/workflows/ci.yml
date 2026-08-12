@@ -49,6 +49,8 @@ jobs:
           uname -a
           lscpu
           node -p "JSON.stringify({arch: process.arch, platform: process.platform, cpus: require('os').cpus()}, null, 2)"
+      - name: Benchmark exact-parity model split
+        run: python tools/benchmark_model.py --samples 50 --warmup 7 --output bench-artifacts/model-cobalt.json
       - name: Validate the complete PWA in native Arm64 Chromium
         run: |
           npm run dev -- --host 127.0.0.1 > /tmp/pinhole-vite.log 2>&1 &
@@ -61,6 +63,7 @@ jobs:
             sleep 1
           done
           curl --fail --silent --output /dev/null http://127.0.0.1:5173
+          node tools/benchmark-browser-model.mjs --output=bench-artifacts/browser-cobalt.json
           PINHOLE_VIEWPORT_WIDTH=390 \
           PINHOLE_VIEWPORT_HEIGHT=844 \
           PINHOLE_SCREENSHOT=.cache/pinhole-browser-arm.png \
@@ -68,8 +71,6 @@ jobs:
           node tools/browser-flow.mjs
           PINHOLE_VIDEO=.cache/video/pinhole-demo-arm.webm \
           node tools/record-demo.mjs
-      - name: Benchmark exact-parity model split
-        run: python tools/benchmark_model.py --samples 50 --warmup 7 --output bench-artifacts/model-cobalt.json
       - name: Validate real-photo retrieval quality
         run: node tools/benchmark-retrieval.mjs --output=bench-artifacts/retrieval-cobalt.json
       - name: Benchmark SIMD compact index

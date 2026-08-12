@@ -1,15 +1,20 @@
 # Benchmark evidence
 
-Pinhole records two independent optimization layers:
+Pinhole records two independent optimization layers through four harnesses:
 
 1. `tools/benchmark_model.py` compares the pinned upstream combined TinyCLIP
    graph with Pinhole's exact-parity text and vision subgraphs. It includes the
    stock combined forward and the stronger raw-ORT requested-output control so
    the reported comparison is not cherry-picked.
-2. `tools/benchmark-index.mjs` compares a Float32 JavaScript cosine scan with
+2. `tools/benchmark-browser-model.mjs` repeats the strongest combined-vs-split
+   control inside native Arm64 Chromium using the same ONNX Runtime Web/WASM
+   backend and runtime artifacts as the product. The 24 MB baseline is served
+   only by Vite's development file route and is never included in the deployed
+   PWA.
+3. `tools/benchmark-index.mjs` compares a Float32 JavaScript cosine scan with
    the app's per-vector INT8 WebAssembly SIMD scan over 10,000 512-dimensional
    vectors. It reports latency, index memory, Recall@10, and top-1 agreement.
-3. `tools/benchmark-retrieval.mjs` runs both split encoders over the 12 attributed
+4. `tools/benchmark-retrieval.mjs` runs both split encoders over the 12 attributed
    demo photographs and 12 fixed natural-language queries. It reports end-task
    top-1 accuracy plus compact-vs-Float32 ranking agreement. This is a transparent
    demo-set regression check, not a claim of general model accuracy.
