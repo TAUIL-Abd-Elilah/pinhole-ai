@@ -71,6 +71,7 @@ function PhotoCard({
 
 function App() {
   const inputRef = useRef<HTMLInputElement>(null)
+  const contactSheetRef = useRef<HTMLElement>(null)
   const {
     photos,
     modelStatus,
@@ -93,7 +94,11 @@ function App() {
 
   const submitSearch = (event: FormEvent) => {
     event.preventDefault()
-    void search()
+    void search().then(() => {
+      if (window.matchMedia('(max-width: 760px)').matches) {
+        contactSheetRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    })
   }
 
   const modelLabel =
@@ -219,7 +224,11 @@ function App() {
           </div>
         </aside>
 
-        <section className="contact-sheet" aria-label="Your local photo index">
+        <section
+          ref={contactSheetRef}
+          className="contact-sheet"
+          aria-label="Your local photo index"
+        >
           <div className="sheet-header">
             <div>
               <p>{scoresActive ? 'Closest moments' : 'Local contact sheet'}</p>

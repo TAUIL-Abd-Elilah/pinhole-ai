@@ -39,7 +39,8 @@ jobs:
           cache: pip
           cache-dependency-path: requirements-dev.txt
       - run: npm ci
-      - run: npm run build:wasm
+      - name: Build the production PWA on Arm64
+        run: npm run build
       - run: python -m pip install -r requirements-dev.txt
       - name: Capture Arm platform
         run: |

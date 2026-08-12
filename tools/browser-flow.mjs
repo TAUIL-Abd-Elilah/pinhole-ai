@@ -4,8 +4,13 @@ import { chromium } from 'playwright-core'
 const target = process.env.PINHOLE_URL ?? 'http://127.0.0.1:5173'
 const executablePath =
   process.env.CHROME_PATH ?? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+const viewport = {
+  width: Number(process.env.PINHOLE_VIEWPORT_WIDTH ?? 1440),
+  height: Number(process.env.PINHOLE_VIEWPORT_HEIGHT ?? 1000),
+}
+const screenshotPath = process.env.PINHOLE_SCREENSHOT ?? '.cache/pinhole-search.png'
 const browser = await chromium.launch({ executablePath, headless: true })
-const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 })
+const page = await browser.newPage({ viewport, deviceScaleFactor: 1, isMobile: viewport.width <= 760 })
 const errors = []
 page.on('pageerror', (error) => errors.push(`page: ${error.message}`))
 page.on('console', (message) => {
@@ -40,7 +45,10 @@ try {
   const topResult = await page.locator('.photo-card').first().locator('figcaption span').innerText()
   await page.waitForTimeout(900)
   await mkdir('.cache', { recursive: true })
-  await page.screenshot({ path: '.cache/pinhole-search.png', fullPage: true })
+  await page.screenshot({
+    path: screenshotPath,
+    fullPage: process.env.PINHOLE_FULL_PAGE !== 'false',
+  })
   console.log(
     JSON.stringify(
       {
@@ -48,6 +56,8 @@ try {
         photoCount: await page.locator('.photo-card').count(),
         metrics: await page.locator('.instrument-strip dd').allInnerTexts(),
         engine: await page.locator('.engine-state').innerText(),
+        viewport,
+        screenshotPath,
         errors,
       },
       null,

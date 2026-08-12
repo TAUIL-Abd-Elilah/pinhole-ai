@@ -13,7 +13,7 @@ searches compact photo embeddings. Photograph bytes are never sent to an API.
 
 Built for the **Arm Create: AI Optimization Challenge 2026 — Mobile AI track**.
 
-![Pinhole returning the golden dog photo from a local demo roll](docs/media/pinhole-search.png)
+![Pinhole private semantic photo search with measured Arm optimization results](docs/media/pinhole-cover.png)
 
 ## Try it
 
@@ -64,19 +64,20 @@ live in [`pinhole-manifest.json`](public/models/pinhole-tinyclip/pinhole-manifes
 
 The committed benchmark run executed on a real 4-core **Arm Neoverse-N2
 (Microsoft Cobalt 100)** GitHub runner (`ubuntu-24.04-arm`, run
-[`31557261642`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31557261642)).
+[`31557654775`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31557654775)).
 These are medians, not best runs:
 
 | Optimization | Arm baseline | Pinhole | Result | Quality guard |
 |---|---:|---:|---:|---|
-| Text query, 1 thread | combined graph 45.68 ms | split text graph 4.03 ms | **11.35x faster** | bit-for-bit equal |
-| Text query, 4 threads | combined graph 15.46 ms | split text graph 1.76 ms | **8.80x faster** | bit-for-bit equal |
-| 10k-vector exact scan | Float32 JS 12.44 ms | INT8 WASM SIMD 3.51 ms | **3.54x faster** | 99.6% mean Recall@10; 100% Top-1 agreement |
+| Text query, 1 thread | combined graph 45.70 ms | split text graph 4.04 ms | **11.30x faster** | bit-for-bit equal |
+| Text query, 4 threads | combined graph 15.51 ms | split text graph 1.73 ms | **8.94x faster** | bit-for-bit equal |
+| 10k-vector exact scan | Float32 JS 12.35 ms | INT8 WASM SIMD 3.45 ms | **3.58x faster** | 99.6% mean Recall@10; 100% Top-1 agreement |
 | 10k-vector index | 20.48 MB | 5.16 MB | **74.8% smaller** | same quality run |
+| 12-photo demo retrieval | Float32 12/12 Top-1 | compact INT8 12/12 Top-1 | **100% agreement** | fixed, disclosed queries |
 
 The raw JSON retains all 50 model samples / 25 search queries, p95, min/max,
 MAD, exact model hashes, environment, and Actions identity. See the
-[`committed evidence`](bench/results/cobalt-31557261642/) and
+[`committed evidence`](bench/results/cobalt-31557654775/) and
 [methodology](bench/README.md).
 
 Three benchmark harnesses reproduce the claims:
@@ -98,7 +99,7 @@ node tools/benchmark-retrieval.mjs
 
 The model harness includes a strong control: it requests only `text_embeds` from
 the unsplit raw ONNX session. ONNX Runtime still scheduled the combined graph on
-Arm (45.67 ms at one thread), while Pinhole's extracted text graph took 4.03 ms.
+Arm (45.72 ms at one thread), while Pinhole's extracted text graph took 4.04 ms.
 That rules out the misleading comparison where a baseline needlessly fetches
 outputs that the runtime could otherwise prune.
 
