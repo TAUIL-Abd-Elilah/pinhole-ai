@@ -1,0 +1,420 @@
+{
+  "schema": "pinhole-retrieval-quality/v1",
+  "created_utc": "2026-08-12T09:26:38.029Z",
+  "runtime": {
+    "platform": "linux",
+    "architecture": "arm64",
+    "node": "v22.23.1",
+    "github": {
+      "GITHUB_ACTIONS": "true",
+      "GITHUB_RUN_ID": "31582721108",
+      "GITHUB_RUN_ATTEMPT": "1",
+      "RUNNER_ARCH": "ARM64",
+      "RUNNER_OS": "Linux",
+      "ImageOS": "ubuntu24-arm64",
+      "ImageVersion": "20260719.67.1"
+    }
+  },
+  "method": {
+    "photos": 12,
+    "queries": 12,
+    "dimension": 512,
+    "model": "TinyCLIP-ViT-8M-16-Text-3M-YFCC15M INT8 exact-parity split graphs",
+    "labels": "one fixed natural-language query per attributed demo photo"
+  },
+  "timings": {
+    "model_load_ms": 246.84477500000003
+  },
+  "quality": {
+    "float_top1_accuracy": 1,
+    "compact_top1_accuracy": 1,
+    "compact_vs_float_top1_agreement": 1,
+    "compact_vs_float_mean_recall_at_3": 1
+  },
+  "cases": [
+    {
+      "query": "a close-up photo of a red bicycle",
+      "expected": "red-firefighter-bicycle.webp",
+      "float_top3": [
+        {
+          "file": "red-firefighter-bicycle.webp",
+          "score": 0.4176324981595645
+        },
+        {
+          "file": "homemade-pizza.webp",
+          "score": 0.27979091071486323
+        },
+        {
+          "file": "blue-vintage-car.webp",
+          "score": 0.24876618631353448
+        }
+      ],
+      "compact_top3": [
+        {
+          "file": "red-firefighter-bicycle.webp",
+          "score": 0.42014897365279474
+        },
+        {
+          "file": "homemade-pizza.webp",
+          "score": 0.2787578773308517
+        },
+        {
+          "file": "blue-vintage-car.webp",
+          "score": 0.24653014249778685
+        }
+      ]
+    },
+    {
+      "query": "a golden dog sitting in the snow",
+      "expected": "golden-dog-in-snow.webp",
+      "float_top3": [
+        {
+          "file": "golden-dog-in-snow.webp",
+          "score": 0.41661806945372126
+        },
+        {
+          "file": "hiker-in-forest.webp",
+          "score": 0.32386187003205713
+        },
+        {
+          "file": "cat-on-sofa.webp",
+          "score": 0.30607665288919206
+        }
+      ],
+      "compact_top3": [
+        {
+          "file": "golden-dog-in-snow.webp",
+          "score": 0.4150561041640527
+        },
+        {
+          "file": "hiker-in-forest.webp",
+          "score": 0.3224766264748552
+        },
+        {
+          "file": "cat-on-sofa.webp",
+          "score": 0.303783426939685
+        }
+      ]
+    },
+    {
+      "query": "a birthday cake with pink candles",
+      "expected": "birthday-cake-candles.webp",
+      "float_top3": [
+        {
+          "file": "birthday-cake-candles.webp",
+          "score": 0.45234663169563344
+        },
+        {
+          "file": "homemade-pizza.webp",
+          "score": 0.3195683167801752
+        },
+        {
+          "file": "coffee-and-book.webp",
+          "score": 0.2502398351782618
+        }
+      ],
+      "compact_top3": [
+        {
+          "file": "birthday-cake-candles.webp",
+          "score": 0.45363000230591555
+        },
+        {
+          "file": "homemade-pizza.webp",
+          "score": 0.3178741504420362
+        },
+        {
+          "file": "coffee-and-book.webp",
+          "score": 0.25175925520800446
+        }
+      ]
+    },
+    {
+      "query": "jagged mountains behind a green field",
+      "expected": "mountains-at-sunset.webp",
+      "float_top3": [
+        {
+          "file": "mountains-at-sunset.webp",
+          "score": 0.410197398839506
+        },
+        {
+          "file": "airplane-wing-at-dusk.webp",
+          "score": 0.2949966775037252
+        },
+        {
+          "file": "hiker-in-forest.webp",
+          "score": 0.24820064645665782
+        }
+      ],
+      "compact_top3": [
+        {
+          "file": "mountains-at-sunset.webp",
+          "score": 0.4098660855216506
+        },
+        {
+          "file": "airplane-wing-at-dusk.webp",
+          "score": 0.2960639510001565
+        },
+        {
+          "file": "hiker-in-forest.webp",
+          "score": 0.24937746240587486
+        }
+      ]
+    },
+    {
+      "query": "a blue vintage car",
+      "expected": "blue-vintage-car.webp",
+      "float_top3": [
+        {
+          "file": "blue-vintage-car.webp",
+          "score": 0.3983782872985244
+        },
+        {
+          "file": "red-firefighter-bicycle.webp",
+          "score": 0.31492172035782023
+        },
+        {
+          "file": "mountains-at-sunset.webp",
+          "score": 0.22344997117010867
+        }
+      ],
+      "compact_top3": [
+        {
+          "file": "blue-vintage-car.webp",
+          "score": 0.3968447853273094
+        },
+        {
+          "file": "red-firefighter-bicycle.webp",
+          "score": 0.3150199100089884
+        },
+        {
+          "file": "mountains-at-sunset.webp",
+          "score": 0.222104249978974
+        }
+      ]
+    },
+    {
+      "query": "a yellow flower on a black background",
+      "expected": "yellow-flower.webp",
+      "float_top3": [
+        {
+          "file": "yellow-flower.webp",
+          "score": 0.4514321507573396
+        },
+        {
+          "file": "homemade-pizza.webp",
+          "score": 0.23169726518830533
+        },
+        {
+          "file": "golden-dog-in-snow.webp",
+          "score": 0.19726029727629615
+        }
+      ],
+      "compact_top3": [
+        {
+          "file": "yellow-flower.webp",
+          "score": 0.4507122436025541
+        },
+        {
+          "file": "homemade-pizza.webp",
+          "score": 0.23232159388904883
+        },
+        {
+          "file": "golden-dog-in-snow.webp",
+          "score": 0.1963175155207625
+        }
+      ]
+    },
+    {
+      "query": "a sleeping cat on a sofa",
+      "expected": "cat-on-sofa.webp",
+      "float_top3": [
+        {
+          "file": "cat-on-sofa.webp",
+          "score": 0.44217936013931125
+        },
+        {
+          "file": "golden-dog-in-snow.webp",
+          "score": 0.23736413914719653
+        },
+        {
+          "file": "coffee-and-book.webp",
+          "score": 0.2298920623614119
+        }
+      ],
+      "compact_top3": [
+        {
+          "file": "cat-on-sofa.webp",
+          "score": 0.4403416154386766
+        },
+        {
+          "file": "golden-dog-in-snow.webp",
+          "score": 0.23840974745563168
+        },
+        {
+          "file": "coffee-and-book.webp",
+          "score": 0.23038953821685548
+        }
+      ]
+    },
+    {
+      "query": "a white sailboat on the water",
+      "expected": "sailboat-at-sea.webp",
+      "float_top3": [
+        {
+          "file": "sailboat-at-sea.webp",
+          "score": 0.45672473717553785
+        },
+        {
+          "file": "airplane-wing-at-dusk.webp",
+          "score": 0.24451577270133945
+        },
+        {
+          "file": "hiker-in-forest.webp",
+          "score": 0.21687909437121816
+        }
+      ],
+      "compact_top3": [
+        {
+          "file": "sailboat-at-sea.webp",
+          "score": 0.45358948522303466
+        },
+        {
+          "file": "airplane-wing-at-dusk.webp",
+          "score": 0.24241659708785585
+        },
+        {
+          "file": "hiker-in-forest.webp",
+          "score": 0.21434426862967507
+        }
+      ]
+    },
+    {
+      "query": "a trail through a dense forest",
+      "expected": "hiker-in-forest.webp",
+      "float_top3": [
+        {
+          "file": "hiker-in-forest.webp",
+          "score": 0.39510329486918055
+        },
+        {
+          "file": "mountains-at-sunset.webp",
+          "score": 0.24793982513664803
+        },
+        {
+          "file": "coffee-and-book.webp",
+          "score": 0.23675872182883154
+        }
+      ],
+      "compact_top3": [
+        {
+          "file": "hiker-in-forest.webp",
+          "score": 0.393769248767256
+        },
+        {
+          "file": "mountains-at-sunset.webp",
+          "score": 0.24900665438417172
+        },
+        {
+          "file": "coffee-and-book.webp",
+          "score": 0.23672443047600333
+        }
+      ]
+    },
+    {
+      "query": "a vegetable pizza on a table",
+      "expected": "homemade-pizza.webp",
+      "float_top3": [
+        {
+          "file": "homemade-pizza.webp",
+          "score": 0.40395819416914197
+        },
+        {
+          "file": "coffee-and-book.webp",
+          "score": 0.23226226271931233
+        },
+        {
+          "file": "yellow-flower.webp",
+          "score": 0.21174319271669964
+        }
+      ],
+      "compact_top3": [
+        {
+          "file": "homemade-pizza.webp",
+          "score": 0.4025526247799685
+        },
+        {
+          "file": "coffee-and-book.webp",
+          "score": 0.23233775779190197
+        },
+        {
+          "file": "yellow-flower.webp",
+          "score": 0.20972460278754623
+        }
+      ]
+    },
+    {
+      "query": "a cup of coffee on an open book",
+      "expected": "coffee-and-book.webp",
+      "float_top3": [
+        {
+          "file": "coffee-and-book.webp",
+          "score": 0.45087886962465995
+        },
+        {
+          "file": "cat-on-sofa.webp",
+          "score": 0.26131067863964297
+        },
+        {
+          "file": "hiker-in-forest.webp",
+          "score": 0.2602540144933598
+        }
+      ],
+      "compact_top3": [
+        {
+          "file": "coffee-and-book.webp",
+          "score": 0.45080280740951706
+        },
+        {
+          "file": "cat-on-sofa.webp",
+          "score": 0.261078994079606
+        },
+        {
+          "file": "hiker-in-forest.webp",
+          "score": 0.25989542527935705
+        }
+      ]
+    },
+    {
+      "query": "an airplane wing above the clouds",
+      "expected": "airplane-wing-at-dusk.webp",
+      "float_top3": [
+        {
+          "file": "airplane-wing-at-dusk.webp",
+          "score": 0.39971884630195165
+        },
+        {
+          "file": "mountains-at-sunset.webp",
+          "score": 0.2448355911109896
+        },
+        {
+          "file": "blue-vintage-car.webp",
+          "score": 0.20492708428520442
+        }
+      ],
+      "compact_top3": [
+        {
+          "file": "airplane-wing-at-dusk.webp",
+          "score": 0.4021088153544076
+        },
+        {
+          "file": "mountains-at-sunset.webp",
+          "score": 0.24476611663874498
+        },
+        {
+          "file": "blue-vintage-car.webp",
+          "score": 0.20305696092930028
+        }
+      ]
+    }
+  ]
+}

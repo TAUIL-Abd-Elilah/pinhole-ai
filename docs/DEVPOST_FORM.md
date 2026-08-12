@@ -40,7 +40,7 @@ match the entrant's experience.
 
 Suggested selections:
 
-- **measuring performance** — three harnesses, strong baselines, dispersion,
+- **measuring performance** — four harnesses, strong baselines, dispersion,
   and native-Arm provenance were needed;
 - **improving model speed or latency** — the combined graph still scheduled the
   vision branch even when only the text output was requested;

@@ -8,9 +8,9 @@
 - **Live application:** https://tauil-abd-elilah.github.io/pinhole-ai/
 - **Public source:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai
 - **License:** MIT
-- **Arm evidence:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31557654775
-- **Native Arm browser proof:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31579510127
-- **Native Arm demo footage:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31579510127
+- **Final Arm evidence:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31582721108
+- **Committed raw evidence:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/tree/main/bench/results/cobalt-31582721108
+- **Native Arm demo footage:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31582721108
 
 ## Project overview
 
@@ -60,7 +60,23 @@ and raw benchmark JSON from a real Arm64 runner.
 
 ## Measured optimization on Arm
 
-Run
+Final run
+[`31582721108`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31582721108)
+executed the shipped ONNX Runtime Web/WASM SIMD path in native Arm64 Chromium on
+four Arm Neoverse-N2 cores. It interleaved 30 samples per path after 7 warm-ups.
+Even the strongest combined-graph control—requesting only `text_embeds`—still
+scheduled the unused vision branch:
+
+| Product-runtime optimization | Strongest baseline | Pinhole | Outcome |
+|---|---:|---:|---:|
+| Browser text query, 2 WASM threads | combined graph 122.903 ms | split text graph 12.633 ms | **9.73x faster** |
+
+The browser result has bit-for-bit output parity and records the host as `arm64`,
+Chromium's high-entropy architecture hint as `arm`/`64`, the exact model hashes,
+and complete median, p95, min/max, and MAD statistics. Its raw JSON is committed
+with the source instead of depending on an expiring CI artifact.
+
+For an independent native CPU and compact-index measurement, run
 [`31557654775`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31557654775)
 used four Arm Neoverse-N2 cores on a Microsoft Cobalt 100 GitHub runner. Model
 tests used ONNX Runtime's CPU execution provider with 7 discarded warm-ups and
@@ -87,14 +103,14 @@ A second independent Arm run is retained in the repository. Across both runs,
 the one-thread text-query speedup is 11.30–11.35x and the exact-scan speedup is
 3.54–3.58x.
 
-The workflow also installs native Arm64 Chromium and executes the complete PWA,
-not only the native benchmark harnesses. Run `31579510127` built the production
+The workflow also executes the complete PWA, not only benchmark harnesses. Final
+run `31582721108` built the production
 app on Cobalt, indexed all 12 real photographs in a 390×844 mobile viewport,
 searched “golden dog in the snow,” returned the dog first, and captured the frame
 used in the project cover. It explicitly asserted the `wasm simd` search path;
-live smoke telemetry reported two WASM threads, a 16.0 ms text encode, and a
-245 µs vector scan with zero console or request errors. Those single UI timings
-are reported as smoke telemetry, not as benchmark medians.
+reported two WASM threads, ran a dynamic WCAG 2 A/AA audit after results settled,
+and completed with zero console or request errors. UI timings remain live smoke
+telemetry and are not represented as benchmark medians.
 
 ## What is original and reusable
 
@@ -108,8 +124,9 @@ not relabel that conversion as original work. Pinhole contributes:
 - a per-vector symmetric INT8 format with measured retrieval quality;
 - a single-call signed-INT8 WASM SIMD batch scan, including scalar fallback and
   non-multiple-of-16 tail tests;
-- reusable model, index, and real-photo benchmark harnesses whose JSON records
-  hardware, runtime, methodology, hashes, dispersion, and quality;
+- reusable native-model, browser-model, index, and real-photo benchmark harnesses
+  whose JSON records hardware, runtime, methodology, hashes, dispersion, and
+  quality;
 - an explicit browser privacy boundary and threat model.
 
 The extraction pattern and compact exact-scan kernel can be reused by other
@@ -155,7 +172,7 @@ node tools/browser-offline.mjs
 
 To reproduce the exact model split and native Arm benchmark, follow
 [`bench/README.md`](../bench/README.md). The public workflow runs the complete
-quality suite on x64 and all three benchmark/quality harnesses on
+quality suite on x64 and all four benchmark/quality harnesses on
 `ubuntu-24.04-arm`.
 
 The offline harness warms the hosted application, indexes and searches the demo

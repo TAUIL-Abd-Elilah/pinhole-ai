@@ -21,7 +21,7 @@ Built for the **Arm Create: AI Optimization Challenge 2026 — Mobile AI track**
 **Load demo roll**, and search for `golden dog in the snow`. The complete path
 runs in the browser; no backend or API key is involved.
 
-Then inspect the [raw Arm benchmark JSON](bench/results/cobalt-31557654775/)
+Then inspect the [final raw Arm evidence](bench/results/cobalt-31582721108/)
 or run the complete local quality gate with one command:
 
 ```bash
@@ -76,8 +76,24 @@ live in [`pinhole-manifest.json`](public/models/pinhole-tinyclip/pinhole-manifes
 
 ## Measured on Arm
 
-The committed benchmark run executed on a real 4-core **Arm Neoverse-N2
-(Microsoft Cobalt 100)** GitHub runner (`ubuntu-24.04-arm`, run
+The final evidence run executed the shipped ONNX Runtime Web/WASM SIMD path in
+native Arm64 Chromium on a real 4-core **Arm Neoverse-N2 (Microsoft Cobalt
+100)** runner. It interleaved 30 samples of each path after 7 warm-ups so
+temperature and scheduling could not systematically favor one path. Even when
+the combined graph requested only `text_embeds`—the strongest unsplit
+control—the exact split was **9.73x faster**:
+
+| Product-runtime measurement | Strongest baseline | Pinhole | Result | Quality guard |
+|---|---:|---:|---:|---|
+| Browser text query, 2 WASM threads | combined graph, text output only: 122.90 ms | split text graph: 12.63 ms | **9.73x faster** | bit-for-bit equal |
+
+The raw result records `host.architecture: arm64`, Chromium's high-entropy
+client hint `architecture: arm`, the exact model hashes, every dispersion
+statistic, and the workflow identity in run
+[`31582721108`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31582721108).
+
+The native CPU and compact-index reference run used the same Cobalt hardware
+(`ubuntu-24.04-arm`, run
 [`31557654775`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31557654775)).
 These are medians, not best runs:
 
@@ -89,21 +105,22 @@ These are medians, not best runs:
 | 10k-vector index | 20.48 MB | 5.16 MB | **74.8% smaller** | same quality run |
 | 12-photo demo retrieval | Float32 12/12 Top-1 | compact INT8 12/12 Top-1 | **100% agreement** | fixed, disclosed queries |
 
-The raw JSON retains all 50 model samples / 25 search queries, p95, min/max,
-MAD, exact model hashes, environment, and Actions identity. See the
-[`committed evidence`](bench/results/cobalt-31557654775/) and
+The raw JSON retains all 50 native model samples / 30 browser model samples / 25
+search queries, p95, min/max, MAD, exact model hashes, environment, and Actions
+identity. See the [`final browser and quality evidence`](bench/results/cobalt-31582721108/),
+the [`native reference evidence`](bench/results/cobalt-31557654775/), and the
 [methodology](bench/README.md).
 
 This is not only a native harness. Run
-[`31579510127`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31579510127)
+[`31582721108`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31582721108)
 installed Arm64 Chromium on Cobalt, built the production PWA, loaded and embedded
 all 12 photographs at a 390×844 mobile viewport, and ranked the dog first with
 two WASM threads and zero console/request errors. The flow explicitly asserted
-the `wasm simd` search path. Its captured Arm frame appears in the cover image
-above; the 16.0 ms text encode and 245 µs vector scan shown in that smoke run are
-live telemetry, not multi-sample benchmark claims.
+the `wasm simd` search path and ran a dynamic WCAG 2 A/AA audit after the ranked
+grid settled. Its captured Arm frame appears in the cover image above; timings
+shown in that product flow are live telemetry, not benchmark claims.
 
-Three benchmark harnesses reproduce the claims:
+Four benchmark harnesses reproduce the claims:
 
 ```bash
 # Exact-parity combined graph vs split graphs
@@ -111,6 +128,10 @@ python -m venv .venv
 . .venv/bin/activate
 pip install -r requirements-dev.txt
 python tools/benchmark_model.py --samples 50 --warmup 7
+
+# Same strongest control in ONNX Runtime Web/WASM SIMD
+# (requires the pinned baseline, Chrome, and a running dev server)
+npm run benchmark:browser-model
 
 # Float32 scalar index vs INT8 WebAssembly SIMD index
 npm run build:wasm

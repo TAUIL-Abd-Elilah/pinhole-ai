@@ -1,0 +1,58 @@
+{
+  "schema": "pinhole-index-benchmark/v1",
+  "created_utc": "2026-08-12T09:26:38.725Z",
+  "runtime": {
+    "platform": "linux",
+    "architecture": "arm64",
+    "node": "v22.23.1",
+    "logical_cpus": 4,
+    "cpu_model": "unknown",
+    "github": {
+      "GITHUB_ACTIONS": "true",
+      "GITHUB_RUN_ID": "31582721108",
+      "GITHUB_RUN_ATTEMPT": "1",
+      "RUNNER_ARCH": "ARM64",
+      "RUNNER_OS": "Linux",
+      "ImageOS": "ubuntu24-arm64",
+      "ImageVersion": "20260719.67.1"
+    }
+  },
+  "method": {
+    "seed": "0x05eeda11",
+    "vectors": 10000,
+    "dimension": 512,
+    "queries": 25,
+    "top_k": 10,
+    "baseline": "Float32 scalar JavaScript cosine scan plus full top-k sort",
+    "optimized": "per-vector symmetric INT8, WebAssembly SIMD dot batch, plus full top-k sort"
+  },
+  "memory": {
+    "baseline_bytes": 20480000,
+    "optimized_bytes": 5160000,
+    "reduction_percent": 74.8046875
+  },
+  "latency": {
+    "baseline": {
+      "samples": 25,
+      "median_ms": 12.43551500000001,
+      "p95_ms": 42.43589699999998,
+      "min_ms": 11.156340999999998,
+      "max_ms": 45.29893100000001,
+      "mad_ms": 0.20188899999993737
+    },
+    "optimized": {
+      "samples": 25,
+      "median_ms": 3.5658520000000067,
+      "p95_ms": 4.2172359999999856,
+      "min_ms": 3.3446199999999635,
+      "max_ms": 5.747252000000003,
+      "mad_ms": 0.12018800000004148
+    },
+    "speedup": 3.487389549538227
+  },
+  "quality": {
+    "mean_recall_at_10": 0.996,
+    "min_recall_at_10": 0.9,
+    "top1_agreement": 1
+  }
+}

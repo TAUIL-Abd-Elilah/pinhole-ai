@@ -24,6 +24,7 @@ budget.
 | [`src/lib/wasm-search-index.ts`](../src/lib/wasm-search-index.ts) | Contiguous index packing, one-call batch scan, and scalar fallback | Replace IDs and persistence without changing the kernel ABI |
 | [`tools/benchmark-index.mjs`](../tools/benchmark-index.mjs) | Seeded latency, memory, Recall@K, and Top-1 agreement | Set corpus size and quality thresholds from the target product |
 | [`tools/benchmark_model.py`](../tools/benchmark_model.py) | Warmed native-Arm model comparison with strong controls | Supply representative shapes and compare against the best unsplit-runtime path |
+| [`tools/benchmark-browser-model.mjs`](../tools/benchmark-browser-model.mjs) | The same strongest control in the product's browser backend | Serve the baseline only to the benchmark page and record both browser and host architecture |
 | [`tools/benchmark-retrieval.mjs`](../tools/benchmark-retrieval.mjs) | End-task regression over real, disclosed inputs | Replace demo assets and expected queries with a versioned product set |
 
 All project-owned code is MIT licensed. Upstream models and runtimes keep their

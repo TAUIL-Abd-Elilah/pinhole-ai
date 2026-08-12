@@ -18,13 +18,17 @@ https://github.com/TAUIL-Abd-Elilah/pinhole-ai
 This 63-second product demo was recorded by native Arm64 Chromium on a Microsoft
 Cobalt 100 runner. The public run includes the recording, screenshot, raw JSON,
 and log that explicitly confirms the WASM SIMD path:
-https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31579510127
+https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31582721108
 
 Measured on a real Arm Neoverse-N2 runner:
+- 9.73x faster text queries in the shipped Chromium/WASM runtime
 - 11.30x faster text queries through exact-parity graph separation
 - 3.58x faster exact 10,000-vector scans with signed-INT8 WASM SIMD
 - 74.8% less index memory
 - bit-for-bit model parity and 99.6% mean Recall@10
+
+Committed raw browser, native model, index, and retrieval JSON:
+https://github.com/TAUIL-Abd-Elilah/pinhole-ai/tree/main/bench/results/cobalt-31582721108
 
 Built for the Arm Create: AI Optimization Challenge 2026, Mobile AI track.
 

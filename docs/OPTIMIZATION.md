@@ -36,6 +36,12 @@ The benchmark includes two baselines:
 
 This second control prevents an exaggerated comparison. Results report both.
 
+The same strongest control is also measured inside native Arm64 Chromium using
+the exact ONNX Runtime Web/WASM SIMD backend and split artifact shipped by the
+PWA. The three paths are interleaved with rotating order on every measured
+repetition, and Chromium's high-entropy architecture hint is retained beside the
+Arm64 host identity in the raw JSON.
+
 ## Change 2: weight quantization
 
 Pinhole uses the upstream ONNX Community INT8 artifact rather than claiming the

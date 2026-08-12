@@ -1,0 +1,182 @@
+{
+  "schema": "pinhole-model-benchmark/v1",
+  "created_utc": "2026-08-12T09:25:15Z",
+  "hardware": {
+    "platform": "Linux-6.17.0-1020-azure-aarch64-with-glibc2.39",
+    "machine": "aarch64",
+    "processor": "aarch64",
+    "logical_cpus": 4,
+    "python": "3.11.15",
+    "onnxruntime": "1.28.0",
+    "onnxruntime_device": "CPU",
+    "lscpu": "Architecture:                            aarch64\nCPU op-mode(s):                          32-bit, 64-bit\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               ARM\nModel name:                              Neoverse-N2\nModel:                                   0\nThread(s) per core:                      1\nCore(s) per socket:                      4\nSocket(s):                               1\nStepping:                                r0p0\nBogoMIPS:                                2000.00\nFlags:                                   fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma lrcpc dcpop sha3 sm3 sm4 asimddp sha512 sve asimdfhm uscat ilrcpc flagm sb paca pacg dcpodp sve2 sveaes svebitperm svesha3 svesm4 flagm2 frint svei8mm svebf16 i8mm bf16\nL1d cache:                               256 KiB (4 instances)\nL1i cache:                               256 KiB (4 instances)\nL2 cache:                                4 MiB (4 instances)\nL3 cache:                                128 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl\nVulnerability Spectre v1:                Mitigation; __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; CSV2, BHB\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n",
+    "github": {
+      "GITHUB_ACTIONS": "true",
+      "GITHUB_RUN_ID": "31582721108",
+      "GITHUB_RUN_ATTEMPT": "1",
+      "RUNNER_ARCH": "ARM64",
+      "RUNNER_OS": "Linux",
+      "ImageOS": "ubuntu24-arm64",
+      "ImageVersion": "20260719.67.1"
+    }
+  },
+  "method": {
+    "warmup": 7,
+    "samples": 50,
+    "execution_provider": "CPUExecutionProvider",
+    "execution_mode": "ORT_SEQUENTIAL",
+    "inter_op_threads": 1,
+    "input": "one 77-token sequence and one zero-valued 224x224 RGB control image"
+  },
+  "artifacts": {
+    "combined": {
+      "bytes": 24281512,
+      "sha256": "844d1a46ab18acf50c989e541b12fe3b6dc7f8d6004725b4e992d142788e0600"
+    },
+    "text": {
+      "bytes": 15367058,
+      "sha256": "c4d75ebae0ae45b699a5bc9cceee1edffd73f60e465d4a6f64b56fd5f06c9a8c"
+    },
+    "vision": {
+      "bytes": 8957217,
+      "sha256": "3b8d3f1d031299cc96fc4c8fac3d99927ddccbdc3962c46e2f36d3e4d7fe9681"
+    }
+  },
+  "runs_by_intra_op_threads": {
+    "1": {
+      "session_load_ms": {
+        "combined": 102.08717,
+        "text": 33.078247,
+        "vision": 45.665928
+      },
+      "stock_combined_forward": {
+        "samples": 50,
+        "median_ms": 46.262322499999996,
+        "p95_ms": 46.727909149999995,
+        "min_ms": 45.990852,
+        "max_ms": 47.01038,
+        "mad_ms": 0.15026550000000327
+      },
+      "combined_requested_text_only": {
+        "samples": 50,
+        "median_ms": 46.275822000000005,
+        "p95_ms": 46.6322724,
+        "min_ms": 46.032605,
+        "max_ms": 46.712958,
+        "mad_ms": 0.10402750000000083
+      },
+      "split_text_forward": {
+        "samples": 50,
+        "median_ms": 4.3232035,
+        "p95_ms": 4.3602898,
+        "min_ms": 4.279182,
+        "max_ms": 4.37881,
+        "mad_ms": 0.021581000000000294
+      },
+      "split_vision_forward": {
+        "samples": 50,
+        "median_ms": 41.504194,
+        "p95_ms": 41.692372,
+        "min_ms": 41.329104,
+        "max_ms": 41.734478,
+        "mad_ms": 0.07184650000000303
+      },
+      "parity": {
+        "text_exact": true,
+        "vision_exact": true,
+        "text_max_abs_error": 0.0,
+        "vision_max_abs_error": 0.0
+      }
+    },
+    "2": {
+      "session_load_ms": {
+        "combined": 93.999418,
+        "text": 35.731072,
+        "vision": 49.08119
+      },
+      "stock_combined_forward": {
+        "samples": 50,
+        "median_ms": 26.224685,
+        "p95_ms": 26.359140800000002,
+        "min_ms": 26.08854,
+        "max_ms": 26.403528,
+        "mad_ms": 0.06145049999999941
+      },
+      "combined_requested_text_only": {
+        "samples": 50,
+        "median_ms": 26.2400375,
+        "p95_ms": 26.37708645,
+        "min_ms": 26.068071,
+        "max_ms": 26.517399,
+        "mad_ms": 0.03453949999999928
+      },
+      "split_text_forward": {
+        "samples": 50,
+        "median_ms": 2.6036765,
+        "p95_ms": 2.63702515,
+        "min_ms": 2.552374,
+        "max_ms": 2.650874,
+        "mad_ms": 0.01649250000000002
+      },
+      "split_vision_forward": {
+        "samples": 50,
+        "median_ms": 23.520041,
+        "p95_ms": 23.62479335,
+        "min_ms": 23.35173,
+        "max_ms": 23.674038,
+        "mad_ms": 0.03816149999999929
+      },
+      "parity": {
+        "text_exact": true,
+        "vision_exact": true,
+        "text_max_abs_error": 0.0,
+        "vision_max_abs_error": 0.0
+      }
+    },
+    "4": {
+      "session_load_ms": {
+        "combined": 101.99112,
+        "text": 34.000005,
+        "vision": 52.557334
+      },
+      "stock_combined_forward": {
+        "samples": 50,
+        "median_ms": 15.9924295,
+        "p95_ms": 17.313018399999997,
+        "min_ms": 15.824323,
+        "max_ms": 21.008187,
+        "mad_ms": 0.06825499999999973
+      },
+      "combined_requested_text_only": {
+        "samples": 50,
+        "median_ms": 16.055903999999998,
+        "p95_ms": 16.46463915,
+        "min_ms": 15.904014,
+        "max_ms": 16.924684,
+        "mad_ms": 0.06416250000000012
+      },
+      "split_text_forward": {
+        "samples": 50,
+        "median_ms": 1.7865060000000001,
+        "p95_ms": 1.9890715999999993,
+        "min_ms": 1.737129,
+        "max_ms": 4.896838,
+        "mad_ms": 0.014377000000000084
+      },
+      "split_vision_forward": {
+        "samples": 50,
+        "median_ms": 14.057662,
+        "p95_ms": 14.3793358,
+        "min_ms": 13.844537,
+        "max_ms": 16.916051,
+        "mad_ms": 0.07537899999999986
+      },
+      "parity": {
+        "text_exact": true,
+        "vision_exact": true,
+        "text_max_abs_error": 0.0,
+        "vision_max_abs_error": 0.0
+      }
+    }
+  }
+}

@@ -9,7 +9,7 @@ does not become the failure mode.
 - [x] Public source repository with an MIT license detected by GitHub.
 - [x] Working no-login live PWA and complete local setup instructions.
 - [x] Mobile AI track named consistently in the app, README, and write-up.
-- [x] Raw repeatable Arm64 benchmark JSON with machine and workflow identity.
+- [x] Raw repeatable Arm64 benchmark JSON with host, Chromium, and workflow identity.
 - [x] Native Arm64 Chromium product flow, responsive screenshot, and demo footage.
 - [x] Model/source hashes, attribution, privacy limits, and quality guards.
 - [x] 1200×630 cover, desktop product image, and 390×844 mobile product image.
