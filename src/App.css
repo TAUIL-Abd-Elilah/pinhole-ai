@@ -126,7 +126,7 @@
   font-size: 10px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--safelight);
+  color: var(--safelight-ink);
 }
 
 .control-copy h1 {
@@ -209,14 +209,19 @@
 .search-box .clear-query {
   position: absolute;
   right: 2px;
-  bottom: -26px;
-  padding: 0;
+  bottom: -31px;
+  min-height: 24px;
+  padding: 4px 0;
   border: 0;
   background: transparent;
   color: var(--muted-ink);
   font-size: 11px;
   text-decoration: underline;
   cursor: pointer;
+}
+
+.search-box[data-active='true'] + .import-actions {
+  margin-top: 29px;
 }
 
 .import-actions {
@@ -512,7 +517,7 @@
 }
 
 .photo-card figcaption strong {
-  color: var(--safelight);
+  color: var(--safelight-ink);
   font-weight: 500;
 }
 
@@ -574,7 +579,7 @@
 }
 
 .sheet-footer strong {
-  color: var(--safelight);
+  color: var(--safelight-ink);
   font-size: 8px;
   font-weight: 500;
 }

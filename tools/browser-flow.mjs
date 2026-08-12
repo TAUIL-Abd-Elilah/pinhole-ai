@@ -1,5 +1,6 @@
 import { mkdir } from 'node:fs/promises'
 import { chromium } from 'playwright-core'
+import axe from 'axe-core'
 
 const target = process.env.PINHOLE_URL ?? 'http://127.0.0.1:5173'
 const executablePath =
@@ -47,7 +48,22 @@ try {
 
   const topResult = await page.locator('.photo-card').first().locator('figcaption span').innerText()
   const runtime = await page.locator('.privacy-proof small').innerText()
-  await page.waitForTimeout(900)
+  await page.waitForTimeout(1100)
+  await page.addScriptTag({ content: axe.source })
+  const accessibilityViolations = await page.evaluate(async () => {
+    const report = await globalThis.axe.run(document, {
+      runOnly: {
+        type: 'tag',
+        values: ['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'],
+      },
+    })
+    return report.violations.map((violation) => ({
+      id: violation.id,
+      impact: violation.impact,
+      description: violation.description,
+      targets: violation.nodes.map((node) => node.target.join(' ')),
+    }))
+  })
   await mkdir('.cache', { recursive: true })
   await page.screenshot({
     path: screenshotPath,
@@ -61,6 +77,7 @@ try {
         metrics: await page.locator('.instrument-strip dd').allInnerTexts(),
         engine: await page.locator('.engine-state').innerText(),
         runtime,
+        accessibilityViolations,
         viewport,
         screenshotPath,
         errors,
@@ -74,6 +91,9 @@ try {
   }
   if (!runtime.toLowerCase().includes('wasm simd')) {
     throw new Error(`Expected the WASM SIMD search path, received: ${runtime}`)
+  }
+  if (accessibilityViolations.length > 0) {
+    throw new Error(`WCAG violations: ${JSON.stringify(accessibilityViolations)}`)
   }
   if (errors.length > 0) process.exitCode = 1
 } finally {

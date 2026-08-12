@@ -27,6 +27,9 @@ does not become the failure mode.
 - [ ] Use project name **Pinhole** and tagline **Describe the moment. Find the
   photo. Nothing leaves your phone.**
 - [ ] Paste and format the copy from [`SUBMISSION.md`](SUBMISSION.md).
+- [ ] Use the exact links, technology list, and suggested survey responses in
+  [`DEVPOST_FORM.md`](DEVPOST_FORM.md), changing any personal survey response
+  that is not true for the entrant.
 - [ ] Add the live app and public repository URLs from the metadata section.
 - [ ] Upload `.cache/final-submission/Pinhole-demo-native-Arm64-narrated.mp4` to
   YouTube, Vimeo, or Youku as a publicly visible video, then add that public URL

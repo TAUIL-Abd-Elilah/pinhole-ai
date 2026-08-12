@@ -55,8 +55,8 @@ benchmark, native-browser, offline, media, and documentation milestones.
 
 The final output includes the installable PWA, pinned exact-parity ONNX models,
 the auditable WAT SIMD kernel, a reproducible graph-extraction tool, unit and
-full-browser tests, privacy documentation, and raw benchmark JSON from a real
-Arm64 runner.
+full-browser tests (including a dynamic WCAG A/AA gate), privacy documentation,
+and raw benchmark JSON from a real Arm64 runner.
 
 ## Measured optimization on Arm
 
@@ -161,7 +161,9 @@ quality suite on x64 and all three benchmark/quality harnesses on
 The offline harness warms the hosted application, indexes and searches the demo
 roll, forces the browser network offline, verifies that an uncached probe is
 blocked, reloads under service-worker control, and successfully performs a
-second local search with no console or request errors.
+second local search with no console or request errors. The main browser harness
+runs axe-core after the contact sheet has ranked and animated, and fails on any
+WCAG 2 A/AA violation.
 
 ## Challenges and learning
 

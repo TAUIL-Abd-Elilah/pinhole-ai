@@ -174,6 +174,7 @@ function App() {
               type="file"
               accept="image/*"
               multiple
+              aria-label="Choose photos to index"
               onChange={(event) => {
                 void importFiles(Array.from(event.target.files ?? []))
                 event.target.value = ''

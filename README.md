@@ -52,8 +52,8 @@ Open the printed URL, choose **Load demo roll**, then search for:
 - `a sailboat on the water`
 
 Or choose your own image files. Pinhole stores only a small WebP thumbnail and a
-512-byte embedding in the browser's IndexedDB. It neither uploads nor retains the
-original file.
+516-byte compact vector (512 signed bytes plus one Float32 scale) in the
+browser's IndexedDB. It neither uploads nor retains the original file.
 
 ## What was optimized
 
@@ -179,10 +179,11 @@ node tools/browser-offline.mjs # cache → force network offline → reload → 
 ```
 
 The full browser flow asserts that `golden dog in the snow` ranks the dog first,
-captures live timing metrics, fails on console/request errors, and saves the same
-screen shown above. The offline flow first proves an uncached request is blocked,
-then reloads the service-worker-controlled live PWA and finds a second photo from
-the persisted local index.
+confirms the WASM SIMD path, injects axe-core after the ranked grid settles, fails
+on any WCAG 2 A/AA violation or console/request error, and saves the same screen
+shown above. The offline flow first proves an uncached request is blocked, then
+reloads the service-worker-controlled live PWA and finds a second photo from the
+persisted local index.
 
 ## Privacy boundary
 
