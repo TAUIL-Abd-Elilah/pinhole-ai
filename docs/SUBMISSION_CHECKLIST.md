@@ -11,8 +11,9 @@ does not become the failure mode.
 - [x] Mobile AI track named consistently in the app, README, and write-up.
 - [x] Raw repeatable Arm64 benchmark JSON with host, Chromium, and workflow identity.
 - [x] Native Arm64 Chromium product flow, responsive screenshot, and demo footage.
-- [x] Native Arm64 video visibly forces browser networking offline and asserts a
-  correct second search with zero request/console errors.
+- [x] Native Arm64 video shows the product's offline status; its harness confirms
+  an uncached probe is blocked and a correct second search completes with zero
+  unexpected request/console errors.
 - [x] Model/source hashes, attribution, privacy limits, and quality guards.
 - [x] 1200×630 cover, desktop product image, and 390×844 mobile product image.
 - [x] Devpost-ready English copy in [`SUBMISSION.md`](SUBMISSION.md).
