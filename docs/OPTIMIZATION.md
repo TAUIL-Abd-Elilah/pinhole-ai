@@ -92,6 +92,9 @@ quantized queries and corpus through signed-INT8 scalar JavaScript and through t
 WASM batch call, records scan-only and full-ranking latency, and fails unless
 every integer dot product and Top-K result matches exactly. The original Float32
 comparison remains the product-level measure of compaction plus SIMD together.
+On the final Arm run, the isolated 10,000-vector scan was 15.44x faster
+(6.735 → 0.436 ms), while the complete scan/rescale/Top-K path was 2.83x faster
+(9.649 → 3.410 ms).
 
 ## Change 5: work avoidance
 

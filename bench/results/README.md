@@ -4,7 +4,11 @@ Each directory is named for the GitHub Actions run that produced it. JSON files
 are committed without post-processing and contain the complete environment,
 method, samples, dispersion, hashes, parity, and ranking-quality fields.
 
-- [`cobalt-31582721108`](cobalt-31582721108/) — final evidence bundle, including
+- [`cobalt-31625513958`](cobalt-31625513958/) — final evidence bundle, including
+  the native Arm64 Chromium comparison and an isolated scalar-INT8 vs WASM SIMD
+  control; [view the workflow
+  run](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31625513958).
+- [`cobalt-31582721108`](cobalt-31582721108/) — previous evidence bundle, including
   the same-runtime native Arm64 Chromium comparison plus model, index, and
   real-photo retrieval evidence; [view the workflow
   run](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31582721108).
@@ -17,6 +21,7 @@ method, samples, dispersion, hashes, parity, and ranking-quality fields.
 
 All executions used four Arm Neoverse-N2 cores on Microsoft Cobalt 100. The two
 original repeatability runs produced 11.30–11.35x native one-thread text-query
-speedups and 3.54–3.58x exact-scan speedups. The final run independently measured
-10.70x and 3.49x, and added a 9.73x exact-parity comparison inside the product's
-actual Chromium/WASM runtime.
+speedups and 3.54–3.58x exact-scan speedups. Run `31582721108` added a 9.73x
+exact-parity comparison inside the product's Chromium/WASM runtime. The final run
+repeated that result at 9.76x and isolated the index kernel: 15.44x scan-only and
+2.83x full-ranking speedups over the identical signed-INT8 scalar control.

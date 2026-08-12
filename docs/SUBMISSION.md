@@ -8,15 +8,15 @@
 - **Live application:** https://tauil-abd-elilah.github.io/pinhole-ai/
 - **Public source:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai
 - **License:** MIT
-- **Final Arm evidence:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31582721108
-- **Committed raw evidence:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/tree/main/bench/results/cobalt-31582721108
-- **Native Arm demo footage:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31582721108
+- **Final Arm evidence:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31625513958
+- **Committed raw evidence:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/tree/main/bench/results/cobalt-31625513958
+- **Native Arm demo footage:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31625513958
 
 ## Project overview
 
 Your camera roll should not have to leave your phone to become searchable.
 Pinhole makes it searchable inside an installable Arm Android PWA: exact-parity
-graph surgery makes queries **9.73x faster in the shipped browser runtime**, each
+graph surgery makes queries **9.76x faster in the shipped browser runtime**, each
 saved search vector uses **74.8% less memory**, and personal data never goes to an
 inference API. Type “golden dog in the snow” instead of remembering a filename or
 date, and Pinhole finds the moment entirely inside the browser.
@@ -60,10 +60,15 @@ the auditable WAT SIMD kernel, a reproducible graph-extraction tool, unit and
 full-browser tests (including a dynamic WCAG A/AA gate), privacy documentation,
 and raw benchmark JSON from a real Arm64 runner.
 
+The deployed product is also measured as a product: a dated Lighthouse 12.8.2
+mobile snapshot scored **97 Performance and 100 Accessibility / Best Practices /
+SEO**. The stronger full-flow gate then loaded the model, indexed and searched
+the real-photo roll, and found zero WCAG 2 A/AA violations after results settled.
+
 ## Measured optimization on Arm
 
 Final run
-[`31582721108`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31582721108)
+[`31625513958`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31625513958)
 executed the shipped ONNX Runtime Web/WASM SIMD path in native Arm64 Chromium on
 four Arm Neoverse-N2 cores. It interleaved 30 samples per path after 7 warm-ups.
 Even the strongest combined-graph control—requesting only `text_embeds`—still
@@ -71,19 +76,26 @@ scheduled the unused vision branch:
 
 | Product-runtime optimization | Strongest baseline | Pinhole | Outcome |
 |---|---:|---:|---:|
-| Browser text query, 2 WASM threads | combined graph 122.903 ms | split text graph 12.633 ms | **9.73x faster** |
+| Browser text query, 2 WASM threads | combined graph 121.865 ms | split text graph 12.493 ms | **9.76x faster** |
 
 The combined graph is the fair baseline because upstream ships no split artifact
 for this model—only variants of one combined graph—so this is where any adopting
 developer actually begins. The `combined_requested_text_only` control closes the
 obvious objection: requesting only `text_embeds` from the unsplit session costs
-122.903 ms against the full forward's 122.897 ms. ONNX Runtime does not prune the
+121.865 ms against the full forward's 121.845 ms. ONNX Runtime does not prune the
 unused vision branch, so the work had to be removed deliberately.
 
 The browser result has bit-for-bit output parity and records the host as `arm64`,
 Chromium's high-entropy architecture hint as `arm`/`64`, the exact model hashes,
 and complete median, p95, min/max, and MAD statistics. Its raw JSON is committed
 with the source instead of depending on an expiring CI artifact.
+
+The same run also isolates the Arm SIMD contribution from INT8 compaction. With
+the exact same quantized queries and 10,000-vector corpus, the signed-INT8
+dot-product scan falls from 6.735 ms in scalar JavaScript to 0.436 ms in the WASM
+batch kernel—**15.44x faster**. Including rescaling and the full Top-K sort, the
+path is **2.83x faster** (9.649 → 3.410 ms). Every integer score and every Top-K
+result is exactly equal between the two paths.
 
 For an independent native CPU and compact-index measurement, run
 [`31557654775`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31557654775)
@@ -113,14 +125,14 @@ the intended result first for all 12 fixed queries, with `1.0` mean Recall@3
 between their rankings. That small, fully disclosed set is a product regression
 test—not a claim of general model accuracy.
 
-Three independent Arm runs are retained in the repository. The two earlier
-repeatability runs measured 11.30–11.35x one-thread text-query and 3.54–3.58x
-exact-scan speedups; the final run independently measured 10.70x and 3.49x on the
-same hardware. Run-to-run dispersion is disclosed rather than averaged away, and
-every figure quoted above names the run that produced it.
+Four independent Arm runs are retained in the repository. Earlier runs remain
+available as repeatability evidence; the newest run adds the isolated
+scalar-INT8 control rather than silently replacing the original methodology.
+Run-to-run dispersion is disclosed rather than averaged away, and every figure
+quoted above names the run that produced it.
 
 The workflow also executes the complete PWA, not only benchmark harnesses. Final
-run `31582721108` built the production
+run `31625513958` built the production
 app on Cobalt, indexed all 12 real photographs in a 390×844 mobile viewport,
 searched “golden dog in the snow,” returned the dog first, and captured the frame
 used in the project cover. It explicitly asserted the `wasm simd` search path;

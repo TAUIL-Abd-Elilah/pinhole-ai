@@ -21,7 +21,7 @@ Built for the **Arm Create: AI Optimization Challenge 2026 — Mobile AI track**
 **Load demo roll**, and search for `golden dog in the snow`. The complete path
 runs in the browser; no backend or API key is involved.
 
-Then inspect the [final raw Arm evidence](bench/results/cobalt-31582721108/)
+Then inspect the [final raw Arm evidence](bench/results/cobalt-31625513958/)
 or run the complete local quality gate with one command:
 
 ```bash
@@ -32,6 +32,11 @@ npm run verify
 The native Arm64 browser proof, exact model hashes, benchmark methodology, and
 quality guards are linked directly below; no account or special hardware is
 needed to evaluate the hosted product.
+
+The deployed experience is measured too: a dated Lighthouse 12.8.2 mobile
+snapshot scored **97 Performance and 100 Accessibility / Best Practices / SEO**,
+and the full ranked-result flow passed its dynamic WCAG 2 A/AA gate. See the
+[reproducible UX audit](docs/UX_AUDIT.md).
 
 ## Run it locally
 
@@ -81,24 +86,36 @@ native Arm64 Chromium on a real 4-core **Arm Neoverse-N2 (Microsoft Cobalt
 100)** runner. It interleaved 30 samples of each path after 7 warm-ups so
 temperature and scheduling could not systematically favor one path. Even when
 the combined graph requested only `text_embeds`—the strongest unsplit
-control—the exact split was **9.73x faster**:
+control—the exact split was **9.76x faster**:
 
 | Product-runtime measurement | Strongest baseline | Pinhole | Result | Quality guard |
 |---|---:|---:|---:|---|
-| Browser text query, 2 WASM threads | combined graph, text output only: 122.90 ms | split text graph: 12.63 ms | **9.73x faster** | bit-for-bit equal |
+| Browser text query, 2 WASM threads | combined graph, text output only: 121.86 ms | split text graph: 12.49 ms | **9.76x faster** | bit-for-bit equal |
 
 Why the combined graph is the fair baseline: upstream publishes **no** split
 artifact for this model—only eight variants of one combined graph—so a developer
 adopting it starts exactly where this measurement starts. The
 `combined_requested_text_only` control settles the obvious objection: asking the
-unsplit session for only `text_embeds` costs 122.90 ms against the full forward's
-122.90 ms, so ONNX Runtime does not prune the unused vision branch on its own.
+unsplit session for only `text_embeds` costs 121.86 ms against the full forward's
+121.85 ms, so ONNX Runtime does not prune the unused vision branch on its own.
 The work had to be removed deliberately.
 
 The raw result records `host.architecture: arm64`, Chromium's high-entropy
 client hint `architecture: arm`, the exact model hashes, every dispersion
 statistic, and the workflow identity in run
-[`31582721108`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31582721108).
+[`31625513958`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31625513958).
+
+The same Arm run isolates the custom SIMD kernel from vector compaction by
+scanning the **identical signed-INT8 corpus** through both paths:
+
+| Arm64 vector measurement | Scalar JavaScript | WASM SIMD | Result | Correctness guard |
+|---|---:|---:|---:|---|
+| Dot-product scan only | 6.735 ms | 0.436 ms | **15.44x faster** | every integer score equal |
+| Scan + rescale + full Top-K sort | 9.649 ms | 3.410 ms | **2.83x faster** | identical Top-K |
+
+These medians cover 25 rotating-order queries after 3 warm-ups. They prove the
+SIMD contribution independently; the Float32-to-compact comparison below remains
+the end-product measure of memory reduction and retrieval quality together.
 
 The native CPU and compact-index reference run used the same Cobalt hardware
 (`ubuntu-24.04-arm`, run
@@ -115,12 +132,12 @@ These are medians, not best runs:
 
 The raw JSON retains all 50 native model samples / 30 browser model samples / 25
 search queries, p95, min/max, MAD, exact model hashes, environment, and Actions
-identity. See the [`final browser and quality evidence`](bench/results/cobalt-31582721108/),
+identity. See the [`final browser and quality evidence`](bench/results/cobalt-31625513958/),
 the [`native reference evidence`](bench/results/cobalt-31557654775/), and the
 [methodology](bench/README.md).
 
 This is not only a native harness. Run
-[`31582721108`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31582721108)
+[`31625513958`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31625513958)
 installed Arm64 Chromium on Cobalt, built the production PWA, loaded and embedded
 all 12 photographs at a 390×844 mobile viewport, and ranked the dog first with
 two WASM threads and zero console/request errors. The flow explicitly asserted

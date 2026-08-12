@@ -28,10 +28,10 @@ specific Microsoft Cobalt 100 runner execution.
 
 ## Final product-runtime Arm run
 
-Run [`31582721108`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31582721108)
+Run [`31625513958`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31625513958)
 used four Neoverse-N2 cores (`ubuntu-24.04-arm`, Microsoft Cobalt 100) and
 native Arm64 Chromium. Raw, machine-readable results are committed in
-[`results/cobalt-31582721108`](results/cobalt-31582721108/).
+[`results/cobalt-31625513958`](results/cobalt-31625513958/).
 
 The browser benchmark uses the shipped ONNX Runtime Web/WASM SIMD backend with
 two threads. It interleaves all three paths with a rotating order for 30 measured
@@ -39,18 +39,25 @@ repetitions after 7 warm-ups:
 
 | Browser measurement | Combined median | Split median | Change |
 |---|---:|---:|---:|
-| Stock combined forward | 122.897 ms | 12.633 ms | 9.73x faster |
-| Combined session requesting only `text_embeds` | 122.903 ms | 12.633 ms | 9.73x faster |
+| Stock combined forward | 121.845 ms | 12.493 ms | 9.75x faster |
+| Combined session requesting only `text_embeds` | 121.865 ms | 12.493 ms | 9.76x faster |
 
 Both comparisons have bit-for-bit output parity. The result separately records
 the Node host as `arm64`, Chromium's high-entropy client hint as `arm`/`64`, and
 the GitHub runner as `ARM64`; the reduced legacy user-agent string is retained
 unaltered as well.
 
-The same final bundle contains the native model, compact-index, and real-photo
-quality results. Its native one-thread split is 10.70x faster than the strongest
-combined control, its four-thread split is 8.99x faster, and its exact compact
-scan is 3.49x faster with `0.996` mean Recall@10 and `1.0` Top-1 agreement.
+The same run isolates SIMD with an identical-INT8 control:
+
+| Arm64 index measurement | Scalar INT8 JS | WASM SIMD | Change |
+|---|---:|---:|---:|
+| Dot-product scan only | 6.735 ms | 0.436 ms | 15.44x faster |
+| Scan, rescale, and full Top-K | 9.649 ms | 3.410 ms | 2.83x faster |
+
+Every integer score and Top-K result matched exactly. Against the Float32
+reference, the compact path retained `0.996` mean Recall@10 and `1.0` Top-1
+agreement. The same bundle's native model split was 11.47x faster at one thread
+and 9.05x faster at four threads than the strongest combined-graph control.
 
 ## Native reference run
 

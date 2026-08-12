@@ -1,0 +1,109 @@
+{
+  "schema": "pinhole-browser-model-benchmark/v1",
+  "created_utc": "2026-08-12T18:02:34.964Z",
+  "browser": "151.0.7922.34",
+  "host": {
+    "platform": "linux",
+    "architecture": "arm64",
+    "node": "v22.23.1"
+  },
+  "artifacts": {
+    "combined": {
+      "bytes": 24281512,
+      "sha256": "844d1a46ab18acf50c989e541b12fe3b6dc7f8d6004725b4e992d142788e0600"
+    },
+    "split_text": {
+      "bytes": 15367058,
+      "sha256": "c4d75ebae0ae45b699a5bc9cceee1edffd73f60e465d4a6f64b56fd5f06c9a8c"
+    }
+  },
+  "github": {
+    "GITHUB_ACTIONS": "true",
+    "GITHUB_RUN_ID": "31625513958",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "RUNNER_ARCH": "ARM64",
+    "RUNNER_OS": "Linux",
+    "ImageOS": "ubuntu24-arm64",
+    "ImageVersion": "20260719.67.1"
+  },
+  "runtime": {
+    "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+    "user_agent_data": {
+      "architecture": "arm",
+      "bitness": "64",
+      "brands": [
+        {
+          "brand": "Chromium",
+          "version": "151"
+        },
+        {
+          "brand": "Not=A?Brand",
+          "version": "99"
+        }
+      ],
+      "fullVersionList": [
+        {
+          "brand": "Chromium",
+          "version": "151.0.7922.34"
+        },
+        {
+          "brand": "Not=A?Brand",
+          "version": "99.0.0.0"
+        }
+      ],
+      "mobile": false,
+      "platform": "Linux",
+      "platformVersion": ""
+    },
+    "hardware_concurrency": 4,
+    "cross_origin_isolated": true,
+    "wasm_threads": 2,
+    "backend": "onnxruntime-web/wasm-simd"
+  },
+  "method": {
+    "warmup": 7,
+    "samples": 30,
+    "scheduling": "paths interleaved with a rotating order for every measured repetition",
+    "input": "one 77-token sequence and one zero-valued 224x224 RGB control image",
+    "stock": "combined graph with all outputs requested",
+    "strongest_control": "combined graph with only text_embeds requested",
+    "optimized": "exact-parity extracted text graph with only text_embeds requested"
+  },
+  "session_load_ms": {
+    "combined": 704.3450000000012,
+    "split_text": 567.7449999999953
+  },
+  "latency": {
+    "stock_combined_forward": {
+      "samples": 30,
+      "median_ms": 121.84500000000116,
+      "p95_ms": 123.05499999999302,
+      "min_ms": 121.36499999999069,
+      "max_ms": 126.87999999997555,
+      "mad_ms": 0.3800000000046566
+    },
+    "combined_requested_text_only": {
+      "samples": 30,
+      "median_ms": 121.86499999999069,
+      "p95_ms": 122.52000000001863,
+      "min_ms": 121.02000000001863,
+      "max_ms": 134.10000000000582,
+      "mad_ms": 0.3150000000023283
+    },
+    "split_text_forward": {
+      "samples": 30,
+      "median_ms": 12.492500000007567,
+      "p95_ms": 12.800000000017462,
+      "min_ms": 12.345000000001164,
+      "max_ms": 12.924999999988358,
+      "mad_ms": 0.07249999999476131
+    },
+    "speedup_vs_stock": 9.75345207123693,
+    "speedup_vs_requested_text_only": 9.755053031812437
+  },
+  "parity": {
+    "text_exact": true,
+    "text_max_abs_error": 0
+  },
+  "errors": []
+}
