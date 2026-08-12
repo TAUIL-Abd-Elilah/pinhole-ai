@@ -87,6 +87,14 @@ this portable `v128` kernel deliberately selects none of those wider or
 Arm-specific extensions directly. A future native KleidiAI path could investigate
 that remaining hardware-specific headroom without weakening the browser fallback.
 
+Another deliberately unshipped experiment is WebAssembly Relaxed SIMD's
+`i32x4.relaxed_dot_i8x16_i7x16_add_s`, which can map to AArch64 `sdot` when dot
+product support is available. Its second operand must stay in signed i7 range
+(-64 to 63) for deterministic cross-engine behavior, so adopting it would require
+re-quantizing the query and re-passing the retrieval gates. Pinhole keeps the
+portable exact-i8 kernel rather than trading verified quality for an ISA-shaped
+headline two days before judging.
+
 The index benchmark now isolates that kernel contribution. It scans the same
 quantized queries and corpus through signed-INT8 scalar JavaScript and through the
 WASM batch call, records scan-only and full-ranking latency, and fails unless
@@ -102,6 +110,11 @@ The browser hashes stable file metadata (`name`, byte length, modification time,
 MIME type). Existing IDs are skipped. The full photo is decoded once inside a
 worker, then only its compact embedding and resized WebP thumbnail are persisted.
 Search never decodes the original again.
+
+Exact repeated text queries use a bounded 16-entry, worker-local LRU embedding
+cache. A hit skips the encoder, returns a copied embedding, and is labeled
+`cached` in the live instrument strip so cached latency is never presented as a
+fresh model forward or mixed into the Arm benchmark claims.
 
 ## Measurement policy
 

@@ -172,8 +172,8 @@ try {
     title: 'Less work.\nSame answers.',
     body: 'Exact graph surgery removes the vision transformer from every text query. Compact vectors are scanned by one signed-INT8 SIMD call.',
     stats: [
-      { value: '11.30×', label: 'faster text query · 1 thread' },
-      { value: '3.58×', label: 'faster exact 10k scan' },
+      { value: '11.47×', label: 'faster text query · 1 thread' },
+      { value: '15.44×', label: 'faster isolated INT8 scan' },
       { value: '−74.8%', label: 'index memory' },
     ],
     footer: 'Bit-for-bit model parity · 99.6% Recall@10',

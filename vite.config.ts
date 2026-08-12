@@ -7,6 +7,10 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.js',
+      injectRegister: false,
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
       manifest: {
@@ -31,13 +35,12 @@ export default defineConfig({
           },
         ],
       },
-      workbox: {
+      injectManifest: {
         // The app shell installs immediately. Model and runtime artifacts are
         // cached on first use by Transformers.js instead of being downloaded
         // behind the user's back during service-worker installation.
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
         maximumFileSizeToCacheInBytes: 2 * 1024 * 1024,
-        navigateFallbackDenylist: [/^\/models\//, /^\/wasm\//],
       },
     }),
   ],

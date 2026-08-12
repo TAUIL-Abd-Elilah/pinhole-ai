@@ -97,18 +97,17 @@ batch kernel—**15.44x faster**. Including rescaling and the full Top-K sort, t
 path is **2.83x faster** (9.649 → 3.410 ms). Every integer score and every Top-K
 result is exactly equal between the two paths.
 
-For an independent native CPU and compact-index measurement, run
-[`31557654775`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31557654775)
-used four Arm Neoverse-N2 cores on a Microsoft Cobalt 100 GitHub runner. Model
-tests used ONNX Runtime's CPU execution provider with 7 discarded warm-ups and
-50 measured forwards. Index tests used 25 fixed seeded queries over 10,000
-512-dimensional vectors. Values below are medians, never best-of-run timings.
+The final run also used four Arm Neoverse-N2 cores for a unified native CPU and
+compact-index measurement. Model tests used ONNX Runtime's CPU execution
+provider with 7 discarded warm-ups and 50 measured forwards. Index tests used
+25 fixed seeded queries over 10,000 512-dimensional vectors. Values below are
+medians, never best-of-run timings.
 
 | Optimization | Baseline | Pinhole | Outcome |
 |---|---:|---:|---:|
-| Text query, 1 thread | combined graph 45.697 ms | split text graph 4.043 ms | **11.30x faster** |
-| Text query, 4 threads | combined graph 15.513 ms | split text graph 1.734 ms | **8.94x faster** |
-| Exact 10k-vector scan | Float32 JavaScript 12.352 ms | INT8 WASM SIMD 3.446 ms | **3.58x faster** |
+| Text query, 1 thread | combined graph 45.553 ms | split text graph 3.972 ms | **11.47x faster** |
+| Text query, 4 threads | combined graph 15.412 ms | split text graph 1.702 ms | **9.05x faster** |
+| Exact 10k-vector full ranking | Float32 JavaScript 9.531 ms | INT8 WASM SIMD 3.410 ms | **2.80x faster** |
 | 10k-vector index | 20,480,000 bytes | 5,160,000 bytes | **74.8% smaller** |
 | Model payload | FP32 94,071,688 bytes | upstream INT8 24,281,512 bytes | **74.2% smaller** |
 
@@ -130,6 +129,11 @@ available as repeatability evidence; the newest run adds the isolated
 scalar-INT8 control rather than silently replacing the original methodology.
 Run-to-run dispersion is disclosed rather than averaged away, and every figure
 quoted above names the run that produced it.
+
+The native and browser model harnesses deliberately use a full **77-token**
+sequence, CLIP's maximum. Pinhole's shipped tokenizer uses the graph's dynamic
+sequence axis and sends the actual query length, so those encoder measurements
+are conservative upper bounds for ordinary short searches.
 
 The workflow also executes the complete PWA, not only benchmark harnesses. Final
 run `31625513958` built the production
@@ -175,9 +179,11 @@ an adoption and measurement checklist.
    and app assets have been cached, inference remains local and the app shell is
    offline-capable.
 
-The hosted Pages environment uses one WASM thread because it cannot set
-cross-origin-isolation headers; SIMD remains active. A self-hosted deployment
-with the included COOP/COEP headers uses up to four threads.
+GitHub Pages cannot emit cross-origin-isolation headers itself, so Pinhole's
+same-origin service worker adds COOP/COEP to the app shell and performs one
+installation reload. That unlocks SharedArrayBuffer and up to four ONNX Runtime
+WASM threads on the hosted PWA. Unsupported browsers retain the exact same SIMD
+path with one thread rather than failing.
 
 ### Build from source
 
@@ -225,11 +231,12 @@ The kernel explicitly sign-extends both halves, accumulates i32 lanes, and keeps
 scalar tail. Tests compare it with straightforward signed arithmetic, including a
 513-dimensional vector.
 
-Finally, browser threading and privacy need precise language. SIMD works on the
-hosted PWA, but multi-threaded WASM requires cross-origin isolation. Pinhole
-reports the active thread count rather than hiding that difference. The app and
-model are downloaded static assets; “nothing leaves your phone” refers to user
-photos, queries, and inference data, which never cross the network boundary.
+Finally, browser threading and privacy need precise language. Multi-threaded WASM
+requires cross-origin isolation, so a custom service worker supplies COOP/COEP on
+the otherwise headerless static host. Pinhole reports the active thread count and
+degrades to one thread if isolation is unavailable. The app and model are
+downloaded static assets; “nothing leaves your phone” refers to user photos,
+queries, and inference data, which never cross the network boundary.
 
 ## Built with
 

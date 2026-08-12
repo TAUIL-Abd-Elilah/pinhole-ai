@@ -23,8 +23,9 @@ https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31625513958
 Measured on a real Arm Neoverse-N2 runner:
 - 9.76x faster text queries in the shipped Chromium/WASM runtime
 - 15.44x faster signed-INT8 scan than the identical scalar control
-- 11.30x faster text queries through exact-parity graph separation
-- 3.58x faster exact 10,000-vector scans with signed-INT8 WASM SIMD
+- 2.83x faster full ranking path than the identical scalar control
+- 11.47x faster text queries through exact-parity graph separation
+- 2.80x faster end-product Float32-to-compact full ranking
 - 74.8% less index memory
 - bit-for-bit model parity and 99.6% mean Recall@10
 

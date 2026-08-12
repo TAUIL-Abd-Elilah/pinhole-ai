@@ -16,6 +16,7 @@ type WorkerRequestBody = RequestWithoutId<WorkerRequest>
 export interface TimedResult<T> {
   value: T
   elapsedMs: number
+  cacheHit?: boolean
 }
 
 export class InferenceClient {
@@ -45,7 +46,11 @@ export class InferenceClient {
       this.pending.delete(response.id)
       if (response.type === 'loaded') pending.resolve(response.threads)
       if (response.type === 'text-result') {
-        pending.resolve({ value: response.embedding, elapsedMs: response.elapsedMs })
+        pending.resolve({
+          value: response.embedding,
+          elapsedMs: response.elapsedMs,
+          cacheHit: response.cacheHit,
+        })
       }
       if (response.type === 'image-result') {
         pending.resolve({ value: response.result, elapsedMs: response.elapsedMs })

@@ -28,6 +28,7 @@ export interface PinholeMetrics {
   avoidedUploadBytes: number
   searchMs: number | null
   textInferenceMs: number | null
+  textCacheHit: boolean
   imageInferenceMs: number | null
   backend: 'wasm-simd' | 'scalar-js' | 'starting'
   threads: number | null
@@ -54,6 +55,7 @@ export function usePinhole() {
   const [lastError, setLastError] = useState<string | null>(null)
   const [searchMs, setSearchMs] = useState<number | null>(null)
   const [textInferenceMs, setTextInferenceMs] = useState<number | null>(null)
+  const [textCacheHit, setTextCacheHit] = useState(false)
   const [imageInferenceMs, setImageInferenceMs] = useState<number | null>(null)
 
   const refreshPhotos = useCallback(async () => {
@@ -199,11 +201,12 @@ export function usePinhole() {
       setSearching(true)
       setLastError(null)
       try {
-        const { value: embedding, elapsedMs } = await client.embedText(cleanQuery)
+        const { value: embedding, elapsedMs, cacheHit } = await client.embedText(cleanQuery)
         const searchStarted = performance.now()
         const results = index.search(embedding, Math.min(48, index.size))
         setSearchMs(performance.now() - searchStarted)
         setTextInferenceMs(elapsedMs)
+        setTextCacheHit(cacheHit === true)
         setScores(new Map(results.map((result) => [result.id, result.score])))
       } catch (error) {
         setLastError(error instanceof Error ? error.message : String(error))
@@ -219,6 +222,7 @@ export function usePinhole() {
     setScores(new Map())
     setSearchMs(null)
     setTextInferenceMs(null)
+    setTextCacheHit(false)
   }, [])
 
   const removePhoto = useCallback(
@@ -246,6 +250,7 @@ export function usePinhole() {
     avoidedUploadBytes: storedPhotos.reduce((sum, photo) => sum + photo.bytes, 0),
     searchMs,
     textInferenceMs,
+    textCacheHit,
     imageInferenceMs,
     backend: indexRef.current?.backend ?? 'starting',
     threads,

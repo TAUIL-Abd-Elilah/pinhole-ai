@@ -1,5 +1,9 @@
 # Arm benchmark results
 
+`lighthouse-20260812.json` is the raw Lighthouse 12.8.2 mobile report behind the
+deployed 97 / 100 / 100 / 100 UX snapshot. Unlike the Arm runtime bundles below,
+it is browser lab evidence rather than an Arm performance benchmark.
+
 Each directory is named for the GitHub Actions run that produced it. JSON files
 are committed without post-processing and contain the complete environment,
 method, samples, dispersion, hashes, parity, and ranking-quality fields.

@@ -103,8 +103,8 @@ await page.setContent(`
           <p class="description">Exact-parity TinyCLIP graph surgery and a 434-byte signed-INT8 WASM SIMD index—inside an installable local-first PWA.</p>
         </section>
         <div class="metrics">
-          <div class="metric"><strong>11.30×</strong><span>faster Arm text query</span></div>
-          <div class="metric"><strong>3.58×</strong><span>faster exact 10k scan</span></div>
+          <div class="metric"><strong>11.47×</strong><span>faster Arm text query</span></div>
+          <div class="metric"><strong>15.44×</strong><span>faster isolated INT8 scan</span></div>
           <div class="metric"><strong>−74.8%</strong><span>index memory</span></div>
         </div>
         <div class="accent-frame"></div>

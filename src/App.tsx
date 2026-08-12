@@ -223,7 +223,11 @@ function App() {
             </div>
             <div>
               <dt>Text encoder</dt>
-              <dd>{formatTime(metrics.textInferenceMs)}</dd>
+              <dd
+                title={metrics.textCacheHit ? 'Repeated query served from the in-memory embedding cache' : undefined}
+              >
+                {metrics.textCacheHit ? 'cached' : formatTime(metrics.textInferenceMs)}
+              </dd>
             </div>
           </dl>
 

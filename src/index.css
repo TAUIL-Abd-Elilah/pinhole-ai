@@ -35,6 +35,17 @@ body {
   min-height: 100vh;
 }
 
+.boot-state {
+  position: fixed;
+  inset: 50% auto auto 50%;
+  margin: 0;
+  color: var(--ink-muted);
+  font: 500 10px/1.4 'IBM Plex Mono', monospace;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  transform: translate(-50%, -50%);
+}
+
 button,
 input {
   font: inherit;

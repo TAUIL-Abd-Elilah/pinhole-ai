@@ -21,6 +21,10 @@ Lighthouse scores are lab snapshots and can vary with network and host load; the
 date, version, URL, and supporting metrics are stated so the result is not
 presented as a timeless guarantee.
 
+The complete machine-readable report is committed at
+[`bench/results/lighthouse-20260812.json`](../bench/results/lighthouse-20260812.json),
+matching the evidentiary standard used by the Arm benchmark bundles.
+
 Reproduce it with:
 
 ```bash

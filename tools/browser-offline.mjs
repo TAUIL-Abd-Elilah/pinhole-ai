@@ -77,6 +77,7 @@ try {
     navigatorOnlineSignal: await page.evaluate(() => navigator.onLine),
     networkProbeBlocked,
     controlledByServiceWorker: await page.evaluate(() => Boolean(navigator.serviceWorker?.controller)),
+    crossOriginIsolated: await page.evaluate(() => globalThis.crossOriginIsolated),
     engine: await page.locator('.engine-state').innerText(),
     errors,
   }
@@ -85,6 +86,9 @@ try {
   if (!onlineTopResult.toLowerCase().includes('golden dog')) process.exitCode = 1
   if (!offlineTopResult.toLowerCase().includes('coffee')) process.exitCode = 1
   if (!networkProbeBlocked || errors.length > 0) process.exitCode = 1
+  if (process.env.PINHOLE_EXPECT_ISOLATED === 'true' && !result.crossOriginIsolated) {
+    process.exitCode = 1
+  }
 } finally {
   await browser.close()
 }

@@ -36,7 +36,8 @@ needed to evaluate the hosted product.
 The deployed experience is measured too: a dated Lighthouse 12.8.2 mobile
 snapshot scored **97 Performance and 100 Accessibility / Best Practices / SEO**,
 and the full ranked-result flow passed its dynamic WCAG 2 A/AA gate. See the
-[reproducible UX audit](docs/UX_AUDIT.md).
+[reproducible UX audit](docs/UX_AUDIT.md) and its
+[committed raw Lighthouse report](bench/results/lighthouse-20260812.json).
 
 ## Run it locally
 
@@ -73,6 +74,7 @@ graph, data representation, and execution path for the constraints of a phone.
 | Search index | 512 Float32 values per photo (2,048 bytes) | 512 INT8 values + one Float32 scale (516 bytes) | 74.8% less index memory |
 | Similarity scan | Scalar JavaScript Float32 loop | Signed INT8 WebAssembly SIMD batches, mapping to Neon on Arm | Higher throughput with deterministic scalar fallback |
 | Re-indexing | Recompute every selected file | Stable metadata fingerprint + IndexedDB cache | Unchanged photos are skipped |
+| Static-host threading | GitHub Pages cannot emit COOP/COEP headers | Isolation service worker plus one-time install reload | SharedArrayBuffer unlocks up to four ONNX Runtime WASM threads; unsupported browsers retain the one-thread path |
 
 The graph split is not an approximation. `tools/prepare_model.py` pins the source
 revision and SHA-256, extracts the two independent ONNX subgraphs, and verifies
@@ -117,24 +119,29 @@ These medians cover 25 rotating-order queries after 3 warm-ups. They prove the
 SIMD contribution independently; the Float32-to-compact comparison below remains
 the end-product measure of memory reduction and retrieval quality together.
 
-The native CPU and compact-index reference run used the same Cobalt hardware
-(`ubuntu-24.04-arm`, run
-[`31557654775`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31557654775)).
-These are medians, not best runs:
+The final run also provides one internally consistent native CPU and
+compact-index comparison on the same Cobalt hardware. These are medians, not
+best runs:
 
 | Optimization | Arm baseline | Pinhole | Result | Quality guard |
 |---|---:|---:|---:|---|
-| Text query, 1 thread | combined graph 45.70 ms | split text graph 4.04 ms | **11.30x faster** | bit-for-bit equal |
-| Text query, 4 threads | combined graph 15.51 ms | split text graph 1.73 ms | **8.94x faster** | bit-for-bit equal |
-| 10k-vector exact scan | Float32 JS 12.35 ms | INT8 WASM SIMD 3.45 ms | **3.58x faster** | 99.6% mean Recall@10; 100% Top-1 agreement |
+| Text query, 1 thread | combined graph 45.55 ms | split text graph 3.97 ms | **11.47x faster** | bit-for-bit equal |
+| Text query, 4 threads | combined graph 15.41 ms | split text graph 1.70 ms | **9.05x faster** | bit-for-bit equal |
+| 10k-vector full ranking | Float32 JS 9.531 ms | INT8 WASM SIMD 3.410 ms | **2.80x faster** | 99.6% mean Recall@10; 100% Top-1 agreement |
 | 10k-vector index | 20.48 MB | 5.16 MB | **74.8% smaller** | same quality run |
 | 12-photo demo retrieval | Float32 12/12 Top-1 | compact INT8 12/12 Top-1 | **100% agreement** | fixed, disclosed queries |
 
 The raw JSON retains all 50 native model samples / 30 browser model samples / 25
 search queries, p95, min/max, MAD, exact model hashes, environment, and Actions
-identity. See the [`final browser and quality evidence`](bench/results/cobalt-31625513958/),
-the [`native reference evidence`](bench/results/cobalt-31557654775/), and the
-[methodology](bench/README.md).
+identity. See the [`final browser and quality evidence`](bench/results/cobalt-31625513958/)
+and the [methodology](bench/README.md). Three earlier runs remain committed as
+repeatability evidence; their pre-control 3.49-3.58x Float32 comparisons are not
+used as the final headline.
+
+Both model harnesses deliberately measure a full **77-token** sequence, CLIP's
+maximum. The shipped tokenizer uses the model's dynamic sequence axis and sends
+only the actual query length, so the quoted encoder latency is a conservative
+upper bound rather than a typical short-query claim.
 
 This is not only a native harness. Run
 [`31625513958`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31625513958)

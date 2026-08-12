@@ -15,6 +15,7 @@ import type { WorkerRequest, WorkerResponse } from './protocol.ts'
 const workerScope = self as unknown as DedicatedWorkerGlobalScope
 const basePath = import.meta.env.BASE_URL
 const modelId = 'pinhole-tinyclip'
+const maxCachedQueries = 16
 
 env.allowLocalModels = true
 env.allowRemoteModels = false
@@ -43,6 +44,7 @@ class InferenceEngine {
   private visionModel: VisionModel | null = null
   private loading: Promise<void> | null = null
   private visionLoading: Promise<void> | null = null
+  private textCache = new Map<string, Float32Array>()
 
   load(requestId: number): Promise<void> {
     this.loading ??= this.loadModels(requestId)
@@ -105,15 +107,39 @@ class InferenceEngine {
     if (!this.tokenizer || !this.textModel) throw new Error('Text encoder did not load')
 
     const started = performance.now()
+    const cached = this.textCache.get(text)
+    if (cached) {
+      this.textCache.delete(text)
+      this.textCache.set(text, cached)
+      const embedding = cached.slice()
+      this.post(
+        {
+          id: requestId,
+          type: 'text-result',
+          embedding,
+          elapsedMs: performance.now() - started,
+          cacheHit: true,
+        },
+        [embedding.buffer],
+      )
+      return
+    }
+
     const textInputs = this.tokenizer([text], { padding: true, truncation: true })
     const output = await this.textModel(textInputs)
     const embedding = new Float32Array(output.text_embeds.data as Float32Array)
+    this.textCache.set(text, embedding.slice())
+    if (this.textCache.size > maxCachedQueries) {
+      const oldest = this.textCache.keys().next().value
+      if (oldest !== undefined) this.textCache.delete(oldest)
+    }
     this.post(
       {
         id: requestId,
         type: 'text-result',
         embedding,
         elapsedMs: performance.now() - started,
+        cacheHit: false,
       },
       [embedding.buffer],
     )

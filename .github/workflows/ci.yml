@@ -43,6 +43,12 @@ jobs:
         run: npx playwright-core install --with-deps chromium
       - name: Build the production PWA on Arm64
         run: npm run build
+      - name: Verify static-host isolation, query cache, and offline search
+        run: |
+          PINHOLE_VIEWPORT_WIDTH=390 \
+          PINHOLE_VIEWPORT_HEIGHT=844 \
+          PINHOLE_FULL_PAGE=false \
+          npm run verify:static-isolation
       - run: python -m pip install -r requirements-dev.txt
       - name: Capture Arm platform
         run: |
@@ -81,5 +87,7 @@ jobs:
           path: |
             bench-artifacts/*.json
             .cache/pinhole-browser-arm.png
+            .cache/pinhole-isolated-local.png
+            .cache/pinhole-offline.png
             .cache/video/pinhole-demo-arm.webm
           if-no-files-found: error

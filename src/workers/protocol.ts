@@ -13,6 +13,12 @@ export interface EmbeddedImageResult {
 export type WorkerResponse =
   | { id: number; type: 'progress'; file: string; progress: number }
   | { id: number; type: 'loaded'; threads: number }
-  | { id: number; type: 'text-result'; embedding: Float32Array; elapsedMs: number }
+  | {
+      id: number
+      type: 'text-result'
+      embedding: Float32Array
+      elapsedMs: number
+      cacheHit: boolean
+    }
   | { id: number; type: 'image-result'; result: EmbeddedImageResult; elapsedMs: number }
   | { id: number; type: 'error'; message: string }

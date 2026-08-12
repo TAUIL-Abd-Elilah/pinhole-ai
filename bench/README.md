@@ -59,12 +59,22 @@ reference, the compact path retained `0.996` mean Recall@10 and `1.0` Top-1
 agreement. The same bundle's native model split was 11.47x faster at one thread
 and 9.05x faster at four threads than the strongest combined-graph control.
 
-## Native reference run
+Both model harnesses deliberately use one full 77-token sequence, the maximum
+accepted by CLIP. The shipped graph has a dynamic sequence axis and the product
+tokenizer sends the actual query length, so the benchmark is a conservative
+encoder upper bound rather than a typical short-query timing.
+
+## Historical pre-control reference run
 
 Run [`31557654775`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31557654775)
 is retained as the published native CPU/index reference. It used the same four
 Neoverse-N2 cores; its machine-readable results are committed in
 [`results/cobalt-31557654775`](results/cobalt-31557654775/).
+
+This earlier harness produced the 3.58x Float32-to-compact scan comparison. The
+final controlled harness above reports 2.80x for that same end-product comparison
+and 15.44x for the isolated SIMD scan; those newer figures are the submission
+headlines.
 
 | Measurement | Baseline median | Pinhole median | Change |
 |---|---:|---:|---:|

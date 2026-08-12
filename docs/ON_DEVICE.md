@@ -19,14 +19,16 @@ timings in the interface.
 1. Open <https://tauil-abd-elilah.github.io/pinhole-ai/> in Chrome on the phone.
 2. Wait for the status pill to read **Local AI ready**.
 3. Tap **Load demo roll** and let all 12 photographs finish indexing.
-4. Search `golden dog in the snow`.
+4. Search `golden dog in the snow`, then `coffee on an open book`, then
+   `yellow flower on black`.
 5. Read the instrument strip at the bottom of the control panel:
    `PHOTOS HERE`, `INDEX`, `VECTOR SEARCH`, `TEXT ENCODER`.
 6. Screenshot the ranked result with the strip visible.
 7. Record the device, SoC, Android version, and Chrome version.
 
-Repeat the search three times and record the **third** value for each figure. The
-first search includes tokenizer warm-up and is not representative.
+Record the **third distinct query's** value. The first search includes tokenizer
+warm-up and is not representative; repeating the exact same text intentionally
+shows `cached` because Pinhole reuses a bounded in-memory query embedding.
 
 ## Results
 
@@ -39,8 +41,9 @@ first search includes tokenizer warm-up and is not representative.
 | Device | _e.g. Pixel 8_ |
 | SoC / core | _e.g. Tensor G3, Cortex-X3 + A715 + A510_ |
 | Android / Chrome | _e.g. Android 15 / Chrome 151_ |
-| WASM threads reported | _hosted Pages build reports 1_ |
+| WASM threads reported | _copy the live status pill; isolated browsers use up to 4_ |
 | Text encoder | _… ms_ |
+| Repeated exact query | _should report `cached`_ |
 | Vector search (12 photos) | _… µs_ |
 | Index size | _… KB_ |
 | Search result | _dog ranked first: yes / no_ |
@@ -53,8 +56,9 @@ Neoverse-N2 figures, and they must never be presented as though they were.
 
 Correct framing for the write-up and the video:
 
-> On a *<device>*, the hosted single-thread PWA embeds a query in *<X>* ms and
-> scans the local index in *<Y>* µs. Live in-app telemetry from one device — the
+> On a *<device>*, the hosted PWA reports *<N>* WASM threads, embeds a fresh query
+> in *<X>* ms, and scans the local index in *<Y>* µs. Live in-app telemetry from
+> one device — the
 > controlled 30-sample comparisons remain the Neoverse-N2 runs in
 > `bench/results/`.
 

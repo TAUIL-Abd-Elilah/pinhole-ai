@@ -16,9 +16,10 @@ compact embeddings in a worker. Originals are never uploaded or retained.
 Describe a moment in plain language. The separate text encoder runs locally, and
 a 434-byte WebAssembly SIMD kernel ranks the compact index.
 
-On a real Arm Neoverse-N2 runner, exact graph surgery made text queries 11.3
-times faster. INT8 SIMD made a ten-thousand-vector scan 3.58 times faster while
-using 74.8 percent less index memory.
+On a real Arm Neoverse-N2 runner, exact graph surgery made text queries 11.47
+times faster. Against the identical INT8 scalar control, SIMD made a
+ten-thousand-vector scan 15.44 times faster and the full ranking path 2.83 times
+faster, while using 74.8 percent less index memory than Float32.
 
 Extracted model outputs are bit-for-bit equal, and the compact benchmark retained
 99.6 percent mean Recall at ten.
