@@ -6,6 +6,7 @@ import { performance } from 'node:perf_hooks'
 const dimension = Number(process.env.PINHOLE_BENCH_DIMENSION ?? 512)
 const count = Number(process.env.PINHOLE_BENCH_COUNT ?? 10_000)
 const queryCount = Number(process.env.PINHOLE_BENCH_QUERIES ?? 25)
+const warmupCount = Number(process.env.PINHOLE_BENCH_WARMUP ?? 3)
 const outputPath = process.argv.find((argument) => argument.startsWith('--output='))?.slice(9)
 
 let state = 0x5eeda11
@@ -79,11 +80,71 @@ if (requiredBytes > memory.buffer.byteLength) {
 }
 new Int8Array(memory.buffer, indexPointer, int8Index.length).set(int8Index)
 const intScores = new Int32Array(memory.buffer, outputPointer, count)
+const scalarIntScores = new Int32Array(count)
 const floatScores = new Float32Array(count)
+const compactScores = new Float32Array(count)
 const baselineTimes = []
+const scalarControlTimes = []
 const optimizedTimes = []
+const scalarScanTimes = []
+const wasmScanTimes = []
 const overlaps = []
 let top1Agreements = 0
+let maxIntegerDifference = 0
+let quantizedTopKMatches = true
+
+function runFloat32(query) {
+  const started = performance.now()
+  for (let item = 0; item < count; item += 1) {
+    let score = 0
+    const offset = item * dimension
+    for (let index = 0; index < dimension; index += 1) {
+      score += query[index] * floatIndex[offset + index]
+    }
+    floatScores[item] = score
+  }
+  const top = topK(floatScores)
+  return { top, total_ms: performance.now() - started }
+}
+
+function runScalarInt8(query, queryScale) {
+  const started = performance.now()
+  for (let item = 0; item < count; item += 1) {
+    let score = 0
+    const offset = item * dimension
+    for (let index = 0; index < dimension; index += 1) {
+      score += query[index] * int8Index[offset + index]
+    }
+    scalarIntScores[item] = score
+  }
+  const scan_ms = performance.now() - started
+  for (let item = 0; item < count; item += 1) {
+    compactScores[item] = scalarIntScores[item] * queryScale * scales[item]
+  }
+  const top = topK(compactScores)
+  return { top, scan_ms, total_ms: performance.now() - started }
+}
+
+function runWasmInt8(queryScale) {
+  const started = performance.now()
+  dotBatch(queryPointer, indexPointer, count, dimension, outputPointer)
+  const scan_ms = performance.now() - started
+  for (let item = 0; item < count; item += 1) {
+    compactScores[item] = intScores[item] * queryScale * scales[item]
+  }
+  const top = topK(compactScores)
+  return { top, scan_ms, total_ms: performance.now() - started }
+}
+
+const warmQuery = new Float32Array(floatIndex.subarray(0, dimension))
+const warmIntQuery = new Int8Array(dimension)
+const warmQueryScale = quantize(warmQuery, warmIntQuery, 0)
+new Int8Array(memory.buffer, queryPointer, dimension).set(warmIntQuery)
+for (let warmup = 0; warmup < warmupCount; warmup += 1) {
+  runFloat32(warmQuery)
+  runScalarInt8(warmIntQuery, warmQueryScale)
+  runWasmInt8(warmQueryScale)
+}
 
 for (let queryNumber = 0; queryNumber < queryCount; queryNumber += 1) {
   const sourceItem = (queryNumber * 397) % count
@@ -93,28 +154,38 @@ for (let queryNumber = 0; queryNumber < queryCount; queryNumber += 1) {
   for (let index = 0; index < dimension; index += 1) query[index] += (random() - 0.5) * 0.002
   normalize(query)
 
-  let started = performance.now()
-  for (let item = 0; item < count; item += 1) {
-    let score = 0
-    const offset = item * dimension
-    for (let index = 0; index < dimension; index += 1) {
-      score += query[index] * floatIndex[offset + index]
-    }
-    floatScores[item] = score
-  }
-  const floatTop = topK(floatScores)
-  baselineTimes.push(performance.now() - started)
-
-  const intQuery = new Int8Array(memory.buffer, queryPointer, dimension)
+  const intQuery = new Int8Array(dimension)
   const queryScale = quantize(query, intQuery, 0)
-  started = performance.now()
-  dotBatch(queryPointer, indexPointer, count, dimension, outputPointer)
-  const compactScores = new Float32Array(count)
+  new Int8Array(memory.buffer, queryPointer, dimension).set(intQuery)
+
+  const measured = {}
+  const paths = [
+    ['float32', () => runFloat32(query)],
+    ['int8_scalar', () => runScalarInt8(intQuery, queryScale)],
+    ['wasm_simd', () => runWasmInt8(queryScale)],
+  ]
+  const rotation = queryNumber % paths.length
+  const orderedPaths = [...paths.slice(rotation), ...paths.slice(0, rotation)]
+  for (const [name, run] of orderedPaths) measured[name] = run()
+
+  const floatTop = measured.float32.top
+  const scalarTop = measured.int8_scalar.top
+  const compactTop = measured.wasm_simd.top
+  baselineTimes.push(measured.float32.total_ms)
+  scalarControlTimes.push(measured.int8_scalar.total_ms)
+  optimizedTimes.push(measured.wasm_simd.total_ms)
+  scalarScanTimes.push(measured.int8_scalar.scan_ms)
+  wasmScanTimes.push(measured.wasm_simd.scan_ms)
+
   for (let item = 0; item < count; item += 1) {
-    compactScores[item] = intScores[item] * queryScale * scales[item]
+    maxIntegerDifference = Math.max(
+      maxIntegerDifference,
+      Math.abs(scalarIntScores[item] - intScores[item]),
+    )
   }
-  const compactTop = topK(compactScores)
-  optimizedTimes.push(performance.now() - started)
+  if (scalarTop.some((item, index) => item !== compactTop[index])) {
+    quantizedTopKMatches = false
+  }
 
   const floatSet = new Set(floatTop)
   overlaps.push(compactTop.filter((index) => floatSet.has(index)).length / 10)
@@ -122,9 +193,12 @@ for (let queryNumber = 0; queryNumber < queryCount; queryNumber += 1) {
 }
 
 const baseline = summary(baselineTimes)
+const scalarControl = summary(scalarControlTimes)
 const optimized = summary(optimizedTimes)
+const scalarScan = summary(scalarScanTimes)
+const wasmScan = summary(wasmScanTimes)
 const result = {
-  schema: 'pinhole-index-benchmark/v1',
+  schema: 'pinhole-index-benchmark/v2',
   created_utc: new Date().toISOString(),
   runtime: {
     platform: process.platform,
@@ -143,9 +217,13 @@ const result = {
     vectors: count,
     dimension,
     queries: queryCount,
+    warmup: warmupCount,
     top_k: 10,
     baseline: 'Float32 scalar JavaScript cosine scan plus full top-k sort',
+    quantized_scalar_control:
+      'the same signed-INT8 vectors and scales as the optimized path, scalar JavaScript dot batch, plus full top-k sort',
     optimized: 'per-vector symmetric INT8, WebAssembly SIMD dot batch, plus full top-k sort',
+    scheduling: 'three paths interleaved with a rotating order for every measured query',
   },
   memory: {
     baseline_bytes: floatIndex.byteLength,
@@ -155,14 +233,30 @@ const result = {
   },
   latency: {
     baseline,
+    int8_scalar_control: scalarControl,
     optimized,
     speedup: baseline.median_ms / optimized.median_ms,
+    simd_speedup_vs_int8_scalar: scalarControl.median_ms / optimized.median_ms,
+    scan_only: {
+      int8_scalar: scalarScan,
+      wasm_simd: wasmScan,
+      speedup: scalarScan.median_ms / wasmScan.median_ms,
+    },
+  },
+  parity: {
+    wasm_matches_scalar_int8: maxIntegerDifference === 0,
+    max_integer_dot_difference: maxIntegerDifference,
+    top_k_exact: quantizedTopKMatches,
   },
   quality: {
     mean_recall_at_10: overlaps.reduce((sum, value) => sum + value, 0) / overlaps.length,
     min_recall_at_10: Math.min(...overlaps),
     top1_agreement: top1Agreements / queryCount,
   },
+}
+
+if (!result.parity.wasm_matches_scalar_int8 || !result.parity.top_k_exact) {
+  throw new Error(`WASM/scalar INT8 parity failed: ${JSON.stringify(result.parity)}`)
 }
 
 const rendered = `${JSON.stringify(result, null, 2)}\n`

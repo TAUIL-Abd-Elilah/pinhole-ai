@@ -17,7 +17,11 @@ coverage
 playwright-report
 test-results
 
+# Private working notes — never publish
+claudevision.md
+
 # Editor directories and files
+.claude
 .vscode/*
 !.vscode/extensions.json
 .idea

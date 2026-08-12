@@ -87,6 +87,14 @@ control—the exact split was **9.73x faster**:
 |---|---:|---:|---:|---|
 | Browser text query, 2 WASM threads | combined graph, text output only: 122.90 ms | split text graph: 12.63 ms | **9.73x faster** | bit-for-bit equal |
 
+Why the combined graph is the fair baseline: upstream publishes **no** split
+artifact for this model—only eight variants of one combined graph—so a developer
+adopting it starts exactly where this measurement starts. The
+`combined_requested_text_only` control settles the obvious objection: asking the
+unsplit session for only `text_embeds` costs 122.90 ms against the full forward's
+122.90 ms, so ONNX Runtime does not prune the unused vision branch on its own.
+The work had to be removed deliberately.
+
 The raw result records `host.architecture: arm64`, Chromium's high-entropy
 client hint `architecture: arm`, the exact model hashes, every dispersion
 statistic, and the workflow identity in run
@@ -178,7 +186,10 @@ network boundary: app/model download only; photos and inference stay in browser
 The inference worker keeps model work off the UI thread. Cross-origin-isolated
 deployments use up to four WASM threads; other hosts retain SIMD with one thread.
 The custom vector kernel has a scalar TypeScript fallback and signed-INT8 parity
-tests, including non-multiple-of-16 tails.
+tests, including non-multiple-of-16 tails. The index harness also times an
+equivalent signed-INT8 scalar control against the WASM batch kernel on the
+identical quantized corpus, so the SIMD contribution is separable from the 74.8%
+storage reduction.
 
 ## Reuse the pattern
 

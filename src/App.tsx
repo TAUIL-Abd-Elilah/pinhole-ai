@@ -49,7 +49,7 @@ function PhotoCard({
       className="photo-card"
       data-rank={rank}
       data-searching={scoresActive ? 'true' : 'false'}
-      style={{ '--rank-delay': `${Math.min(rank, 18) * 28}ms` } as React.CSSProperties}
+      style={{ '--rank-delay': `${Math.min(rank, 12) * 18}ms` } as React.CSSProperties}
     >
       <div className="photo-frame">
         <img src={photo.url} alt={accessibleName} />

@@ -13,7 +13,9 @@ Pinhole records two independent optimization layers through four harnesses:
    PWA.
 3. `tools/benchmark-index.mjs` compares a Float32 JavaScript cosine scan with
    the app's per-vector INT8 WebAssembly SIMD scan over 10,000 512-dimensional
-   vectors. It reports latency, index memory, Recall@10, and top-1 agreement.
+   vectors. A second control scans the identical INT8 data in scalar JavaScript,
+   isolating SIMD from quantization. It reports scan-only and full-ranking
+   latency, exact scalar/WASM parity, index memory, Recall@10, and Top-1 agreement.
 4. `tools/benchmark-retrieval.mjs` runs both split encoders over the 12 attributed
    demo photographs and 12 fixed natural-language queries. It reports end-task
    top-1 accuracy plus compact-vs-Float32 ranking agreement. This is a transparent

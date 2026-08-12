@@ -14,12 +14,12 @@
 
 ## Project overview
 
-We take thousands of photos and then lose the moments inside them. Cloud photo
-search can help, but it asks users to put a deeply personal camera roll on
-someone else's infrastructure. Pinhole is an installable semantic photo-search
-PWA built for Arm-powered Android devices. A user can type “golden dog in the
-snow” instead of remembering a filename or date, and Pinhole finds the photo
-entirely inside the browser.
+Your camera roll should not have to leave your phone to become searchable.
+Pinhole makes it searchable inside an installable Arm Android PWA: exact-parity
+graph surgery makes queries **9.73x faster in the shipped browser runtime**, each
+saved search vector uses **74.8% less memory**, and personal data never goes to an
+inference API. Type “golden dog in the snow” instead of remembering a filename or
+date, and Pinhole finds the moment entirely inside the browser.
 
 The product experience is simple, but the implementation changes the model
 graph, storage representation, and retrieval path for on-device constraints. It
@@ -30,10 +30,12 @@ vectors with a custom 434-byte signed-INT8 WebAssembly SIMD kernel. The result i
 a useful privacy experience with optimization that a judge can inspect,
 reproduce, and measure.
 
-Pinhole should win because the optimization is inseparable from the human value:
-less computation, memory, and network dependence are exactly what let personal
-photos remain personal. It is a finished, one-click demo, not a benchmark wrapped
-around a hypothetical product.
+The optimization is inseparable from the human value: less computation, memory,
+and network dependence are exactly what let personal photos remain personal.
+Unlike an on-device concept with a single timing, Pinhole ships reproducible Arm
+comparisons, strong controls, raw samples, and a correctness gate for every speed
+or size claim. It is a finished, one-click demo, not a benchmark wrapped around a
+hypothetical product.
 
 Pinhole was created on August 12, 2026, inside the June 10–August 14 hackathon
 period. Its complete public commit history records the implementation,
@@ -71,6 +73,13 @@ scheduled the unused vision branch:
 |---|---:|---:|---:|
 | Browser text query, 2 WASM threads | combined graph 122.903 ms | split text graph 12.633 ms | **9.73x faster** |
 
+The combined graph is the fair baseline because upstream ships no split artifact
+for this model—only variants of one combined graph—so this is where any adopting
+developer actually begins. The `combined_requested_text_only` control closes the
+obvious objection: requesting only `text_embeds` from the unsplit session costs
+122.903 ms against the full forward's 122.897 ms. ONNX Runtime does not prune the
+unused vision branch, so the work had to be removed deliberately.
+
 The browser result has bit-for-bit output parity and records the host as `arm64`,
 Chromium's high-entropy architecture hint as `arm`/`64`, the exact model hashes,
 and complete median, p95, min/max, and MAD statistics. Its raw JSON is committed
@@ -91,6 +100,11 @@ tests used ONNX Runtime's CPU execution provider with 7 discarded warm-ups and
 | 10k-vector index | 20,480,000 bytes | 5,160,000 bytes | **74.8% smaller** |
 | Model payload | FP32 94,071,688 bytes | upstream INT8 24,281,512 bytes | **74.2% smaller** |
 
+The Float32 JavaScript baseline has occasional long p95 pauses consistent with
+runtime scheduling or garbage collection. They remain in the raw JSON; medians
+are used for the headline so an isolated pause does not become either a penalty
+or a cherry-picked advantage.
+
 Correctness accompanies every speed claim. Extracted text and vision outputs are
 bit-for-bit equal to the combined graph (maximum absolute error `0.0`). The
 compact seeded index reaches `0.996` mean Recall@10 and `1.0` Top-1 agreement.
@@ -99,9 +113,11 @@ the intended result first for all 12 fixed queries, with `1.0` mean Recall@3
 between their rankings. That small, fully disclosed set is a product regression
 test—not a claim of general model accuracy.
 
-A second independent Arm run is retained in the repository. Across both runs,
-the one-thread text-query speedup is 11.30–11.35x and the exact-scan speedup is
-3.54–3.58x.
+Three independent Arm runs are retained in the repository. The two earlier
+repeatability runs measured 11.30–11.35x one-thread text-query and 3.54–3.58x
+exact-scan speedups; the final run independently measured 10.70x and 3.49x on the
+same hardware. Run-to-run dispersion is disclosed rather than averaged away, and
+every figure quoted above names the run that produced it.
 
 The workflow also executes the complete PWA, not only benchmark harnesses. Final
 run `31582721108` built the production

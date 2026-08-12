@@ -1,9 +1,9 @@
 # Devpost form values
 
 Use this as a field-by-field companion to [`SUBMISSION.md`](SUBMISSION.md).
-Personal eligibility and survey answers must remain truthful; the suggestions
-below reflect the work recorded in this repository, not facts Codex can assert
-on behalf of the entrant.
+Personal eligibility and survey answers must remain truthful. The suggestions
+below reflect the work recorded in this repository; they are not assertions about
+the entrant and should be edited wherever they do not match their experience.
 
 ## Public project fields
 

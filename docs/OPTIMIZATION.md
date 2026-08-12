@@ -78,6 +78,21 @@ to Neon instructions in the engine. The 434-byte module searches a contiguous
 index in one call, avoiding a JavaScript↔WASM boundary for each photo. Tests compare
 the output against scalar signed arithmetic, including a 513-dimensional tail.
 
+At the ISA level, the natural AArch64 Neon lowering for this loop is `smull` /
+`smull2` for the signed low/high widening multiplies and `saddlp` for each signed
+pairwise widening add. That mapping is an architectural expectation, not a claim
+that this run captured V8 disassembly—the engine remains free to select an
+equivalent sequence. The Cobalt runner advertises `asimd`, `i8mm`, and `sve2`, but
+this portable `v128` kernel deliberately selects none of those wider or
+Arm-specific extensions directly. A future native KleidiAI path could investigate
+that remaining hardware-specific headroom without weakening the browser fallback.
+
+The index benchmark now isolates that kernel contribution. It scans the same
+quantized queries and corpus through signed-INT8 scalar JavaScript and through the
+WASM batch call, records scan-only and full-ranking latency, and fails unless
+every integer dot product and Top-K result matches exactly. The original Float32
+comparison remains the product-level measure of compaction plus SIMD together.
+
 ## Change 5: work avoidance
 
 The browser hashes stable file metadata (`name`, byte length, modification time,
