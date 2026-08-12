@@ -95,12 +95,13 @@ MAD, exact model hashes, environment, and Actions identity. See the
 [methodology](bench/README.md).
 
 This is not only a native harness. Run
-[`31558535128`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31558535128)
+[`31579510127`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31579510127)
 installed Arm64 Chromium on Cobalt, built the production PWA, loaded and embedded
 all 12 photographs at a 390×844 mobile viewport, and ranked the dog first with
-two WASM threads and zero console/request errors. Its captured Arm frame appears
-in the cover image above; the 9.3 ms text timing shown in that smoke run is live
-telemetry, not a multi-sample benchmark claim.
+two WASM threads and zero console/request errors. The flow explicitly asserted
+the `wasm simd` search path. Its captured Arm frame appears in the cover image
+above; the 16.0 ms text encode and 245 µs vector scan shown in that smoke run are
+live telemetry, not multi-sample benchmark claims.
 
 Three benchmark harnesses reproduce the claims:
 

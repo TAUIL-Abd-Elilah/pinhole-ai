@@ -15,6 +15,11 @@ Try the live PWA: https://tauil-abd-elilah.github.io/pinhole-ai/
 Source and reproducible evidence:
 https://github.com/TAUIL-Abd-Elilah/pinhole-ai
 
+This 63-second product demo was recorded by native Arm64 Chromium on a Microsoft
+Cobalt 100 runner. The public run includes the recording, screenshot, raw JSON,
+and log that explicitly confirms the WASM SIMD path:
+https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31579510127
+
 Measured on a real Arm Neoverse-N2 runner:
 - 11.30x faster text queries through exact-parity graph separation
 - 3.58x faster exact 10,000-vector scans with signed-INT8 WASM SIMD

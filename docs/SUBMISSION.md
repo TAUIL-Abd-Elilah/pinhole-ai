@@ -9,8 +9,8 @@
 - **Public source:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai
 - **License:** MIT
 - **Arm evidence:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31557654775
-- **Native Arm browser proof:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31558535128
-- **Native Arm demo footage:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31559237252
+- **Native Arm browser proof:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31579510127
+- **Native Arm demo footage:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31579510127
 
 ## Project overview
 
@@ -88,12 +88,13 @@ the one-thread text-query speedup is 11.30–11.35x and the exact-scan speedup i
 3.54–3.58x.
 
 The workflow also installs native Arm64 Chromium and executes the complete PWA,
-not only the native benchmark harnesses. Run `31558535128` built the production
+not only the native benchmark harnesses. Run `31579510127` built the production
 app on Cobalt, indexed all 12 real photographs in a 390×844 mobile viewport,
 searched “golden dog in the snow,” returned the dog first, and captured the frame
-used in the project cover. Live smoke telemetry reported two WASM threads and a
-9.3 ms text encode with zero console or request errors. That single UI timing is
-reported as smoke telemetry, not as a benchmark median.
+used in the project cover. It explicitly asserted the `wasm simd` search path;
+live smoke telemetry reported two WASM threads, a 16.0 ms text encode, and a
+245 µs vector scan with zero console or request errors. Those single UI timings
+are reported as smoke telemetry, not as benchmark medians.
 
 ## What is original and reusable
 
