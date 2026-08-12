@@ -20,6 +20,9 @@ const context = await browser.newContext({
 })
 const page = await context.newPage()
 const errors = []
+let firstResult = ''
+let offlineTopResult = ''
+let networkForcedOffline = false
 
 page.on('pageerror', (error) => errors.push(`page: ${error.message}`))
 page.on('console', (message) => {
@@ -125,6 +128,40 @@ async function hideCard() {
   await page.evaluate(() => document.querySelector('#pinhole-video-card')?.remove())
 }
 
+async function enableOfflineProof() {
+  await context.setOffline(true)
+  networkForcedOffline = await page.evaluate(() => !navigator.onLine)
+  if (!networkForcedOffline) throw new Error('Browser did not enter the forced-offline state')
+
+  await page.evaluate(() => {
+    if (!document.querySelector('#pinhole-offline-proof-style')) {
+      const style = document.createElement('style')
+      style.id = 'pinhole-offline-proof-style'
+      style.textContent = `
+        #pinhole-offline-proof {
+          position: fixed; top: 18px; right: 18px; z-index: 2147483000;
+          display: flex; align-items: center; gap: 9px; padding: 10px 13px;
+          border: 1px solid rgba(220,231,232,.32); border-radius: 999px;
+          color: #dce7e8; background: #14282c;
+          box-shadow: 0 10px 28px rgba(20,40,44,.22);
+          font: 500 10px/1 'IBM Plex Mono', monospace;
+          letter-spacing: .1em; text-transform: uppercase;
+        }
+        #pinhole-offline-proof::before {
+          content: ''; width: 8px; height: 8px; border-radius: 50%;
+          background: #ed6547; box-shadow: 0 0 0 3px rgba(237,101,71,.2);
+        }
+      `
+      document.head.append(style)
+    }
+    const badge = document.createElement('div')
+    badge.id = 'pinhole-offline-proof'
+    badge.textContent = 'Browser network forced offline'
+    document.body.append(badge)
+  })
+  await pause(650)
+}
+
 try {
   await page.goto(target, { waitUntil: 'domcontentloaded', timeout: 30_000 })
   await page.waitForFunction(
@@ -162,7 +199,7 @@ try {
   )
   await pause(6500)
 
-  const firstResult = await page.locator('.photo-card').first().locator('figcaption span').innerText()
+  firstResult = await page.locator('.photo-card').first().locator('figcaption span').innerText()
   if (!firstResult.toLowerCase().includes('golden dog')) {
     throw new Error(`Unexpected first result: ${firstResult}`)
   }
@@ -181,14 +218,25 @@ try {
   await pause(8900)
   await hideCard()
 
+  await enableOfflineProof()
   await search.fill('coffee on an open book')
   await page.getByRole('button', { name: 'Find it' }).click()
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('.photo-card figcaption span')
+        ?.textContent?.toLowerCase()
+        .includes('coffee'),
+    undefined,
+    { timeout: 30_000 },
+  )
+  offlineTopResult = await page.locator('.photo-card').first().locator('figcaption span').innerText()
   await pause(5200)
 
   await showCard({
-    kicker: 'A privacy boundary you can inspect',
+    kicker: 'Browser network forced offline · search completed',
     title: 'Photos in.\nNothing out.',
-    body: 'The vision model wakes only for imports. IndexedDB keeps a WebP thumbnail and a 516-byte embedding—not the original. Search runs offline after static assets are cached.',
+    body: 'The vision model wakes only for imports. IndexedDB keeps a WebP thumbnail and a 516-byte embedding—not the original. The second search just completed with browser networking disabled.',
     stats: [
       { value: '15.37 MB', label: 'text-only query graph' },
       { value: '8.96 MB', label: 'lazy vision graph' },
@@ -220,5 +268,12 @@ try {
   await browser.close()
 }
 
-console.log(JSON.stringify({ output, firstResult: 'golden dog', errors }, null, 2))
+console.log(
+  JSON.stringify(
+    { output, firstResult, offlineTopResult, networkForcedOffline, errors },
+    null,
+    2,
+  ),
+)
+if (!offlineTopResult.toLowerCase().includes('coffee')) process.exitCode = 1
 if (errors.length > 0) process.exitCode = 1

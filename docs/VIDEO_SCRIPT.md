@@ -35,7 +35,8 @@ repository.
 3. Load the attributed demo roll; show live photo/index metrics.
 4. Type “golden dog in the snow”; reveal the correct ranked result.
 5. Show the three measured Arm outcomes and correctness guard.
-6. Search for “coffee on an open book” to prove re-ranking is live.
+6. Force browser networking offline, then search for “coffee on an open book”
+   and hold on the correct result plus the visible offline badge.
 7. Show split-model sizes, the 434-byte kernel, and retained-data boundary.
 8. End on the live PWA URL and public evidence invitation.
 
