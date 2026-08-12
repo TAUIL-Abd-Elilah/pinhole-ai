@@ -39,6 +39,8 @@ jobs:
           cache: pip
           cache-dependency-path: requirements-dev.txt
       - run: npm ci
+      - name: Install native Arm64 Chromium
+        run: npx playwright-core install --with-deps chromium
       - name: Build the production PWA on Arm64
         run: npm run build
       - run: python -m pip install -r requirements-dev.txt
@@ -47,6 +49,23 @@ jobs:
           uname -a
           lscpu
           node -p "JSON.stringify({arch: process.arch, platform: process.platform, cpus: require('os').cpus()}, null, 2)"
+      - name: Validate the complete PWA in native Arm64 Chromium
+        run: |
+          npm run dev -- --host 127.0.0.1 > /tmp/pinhole-vite.log 2>&1 &
+          server_pid=$!
+          trap 'kill $server_pid' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent --output /dev/null http://127.0.0.1:5173; then
+              break
+            fi
+            sleep 1
+          done
+          curl --fail --silent --output /dev/null http://127.0.0.1:5173
+          PINHOLE_VIEWPORT_WIDTH=390 \
+          PINHOLE_VIEWPORT_HEIGHT=844 \
+          PINHOLE_SCREENSHOT=.cache/pinhole-browser-arm.png \
+          PINHOLE_FULL_PAGE=false \
+          node tools/browser-flow.mjs
       - name: Benchmark exact-parity model split
         run: python tools/benchmark_model.py --samples 50 --warmup 7 --output bench-artifacts/model-cobalt.json
       - name: Validate real-photo retrieval quality
@@ -56,5 +75,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: pinhole-cobalt-100-${{ github.run_id }}
-          path: bench-artifacts/*.json
+          path: |
+            bench-artifacts/*.json
+            .cache/pinhole-browser-arm.png
           if-no-files-found: error

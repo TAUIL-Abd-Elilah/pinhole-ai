@@ -3,7 +3,10 @@ import { chromium } from 'playwright-core'
 
 const target = process.env.PINHOLE_URL ?? 'http://127.0.0.1:5173'
 const executablePath =
-  process.env.CHROME_PATH ?? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+  process.env.CHROME_PATH ??
+  (process.platform === 'win32'
+    ? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+    : chromium.executablePath())
 const viewport = {
   width: Number(process.env.PINHOLE_VIEWPORT_WIDTH ?? 1440),
   height: Number(process.env.PINHOLE_VIEWPORT_HEIGHT ?? 1000),
