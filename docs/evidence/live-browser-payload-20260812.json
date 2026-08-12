@@ -1,0 +1,80 @@
+{
+  "testedAt": "2026-08-12T21:35:28.404Z",
+  "target": "https://tauil-abd-elilah.github.io/pinhole-ai/",
+  "topResult": "GOLDEN DOG IN SNOW",
+  "photoCount": 12,
+  "firstSearchMetrics": [
+    "12",
+    "6.0 KB",
+    "320 µs",
+    "17.0 ms"
+  ],
+  "repeatedQuery": {
+    "topResult": "GOLDEN DOG IN SNOW",
+    "textMetric": "cached"
+  },
+  "engine": "Local AI ready · 4 threads",
+  "runtime": "INT8 TINYCLIP · WASM SIMD · INDEXEDDB ONLY",
+  "crossOriginIsolated": true,
+  "controlledByServiceWorker": true,
+  "environment": {
+    "browser": "151.0.7922.109",
+    "node": "v22.18.0",
+    "hostPlatform": "win32",
+    "hostArchitecture": "x64",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36"
+  },
+  "networkProfile": {
+    "name": "native"
+  },
+  "coldFlowMs": {
+    "localAiReady": 5051,
+    "demoIndexed": 11940,
+    "firstResult": 12112
+  },
+  "runtimeArtifacts": [
+    {
+      "url": "https://tauil-abd-elilah.github.io/pinhole-ai/wasm/pinhole-index.wasm",
+      "status": 200,
+      "responseContentLength": 325,
+      "contentEncoding": "gzip",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "https://tauil-abd-elilah.github.io/pinhole-ai/models/pinhole-tinyclip/onnx/text_model_quantized.onnx",
+      "status": 200,
+      "responseContentLength": 9790152,
+      "contentEncoding": "gzip",
+      "fromServiceWorker": false
+    },
+    {
+      "url": "https://tauil-abd-elilah.github.io/pinhole-ai/wasm/ort-wasm-simd-threaded.wasm",
+      "status": 200,
+      "responseContentLength": 3352806,
+      "contentEncoding": "gzip",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "https://tauil-abd-elilah.github.io/pinhole-ai/wasm/ort-wasm-simd-threaded.mjs",
+      "status": 200,
+      "responseContentLength": 9063,
+      "contentEncoding": "gzip",
+      "fromServiceWorker": true
+    },
+    {
+      "url": "https://tauil-abd-elilah.github.io/pinhole-ai/models/pinhole-tinyclip/onnx/vision_model_quantized.onnx",
+      "status": 200,
+      "responseContentLength": 6741336,
+      "contentEncoding": "gzip",
+      "fromServiceWorker": false
+    }
+  ],
+  "knownResponseBytes": 19893682,
+  "accessibilityViolations": [],
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "screenshotPath": ".cache/pinhole-live-payload-final.png",
+  "errors": []
+}

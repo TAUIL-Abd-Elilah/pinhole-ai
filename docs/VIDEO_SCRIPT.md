@@ -38,3 +38,13 @@ repository.
 6. Search for “coffee on an open book” to prove re-ranking is live.
 7. Show split-model sizes, the 434-byte kernel, and retained-data boundary.
 8. End on the live PWA URL and public evidence invitation.
+
+## Highest-value phone replacement shot
+
+If a real Android device is available, replace shots 2–4 with a 12–18 second
+portrait capture: finish one online run, turn on Airplane mode, reopen Pinhole,
+search `coffee on an open book`, and hold on the correct result plus live thread
+count. Keep the controlled Neoverse-N2 numbers in the narration and label phone
+timings as single-device UI telemetry, not benchmark medians. The existing Arm64
+video remains the compliant fallback; do not miss submission waiting for this
+optional shot.

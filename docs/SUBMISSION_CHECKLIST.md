@@ -34,6 +34,9 @@ does not become the failure mode.
 - [ ] Upload `.cache/final-submission/Pinhole-demo-native-Arm64-narrated.mp4` to
   YouTube, Vimeo, or Youku as a publicly visible video, then add that public URL
   to Devpost. The caption-card-only fallback is the adjacent `captioned.mp4`.
+- [ ] If any Arm Android phone is available, capture the short Airplane-mode
+  proof in [`ON_DEVICE.md`](ON_DEVICE.md) and record only real displayed values.
+  This is the highest-value optional upgrade; it must not delay submission.
 - [ ] Use `.cache/final-submission/Pinhole-video-thumbnail-1280x720.png` as the video
   thumbnail and optionally upload `Pinhole-demo-en.srt` as English captions.
 - [ ] Upload `media/pinhole-cover.png` first, followed by

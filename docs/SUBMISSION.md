@@ -30,6 +30,11 @@ vectors with a custom 434-byte signed-INT8 WebAssembly SIMD kernel. The result i
 a useful privacy experience with optimization that a judge can inspect,
 reproduce, and measure.
 
+The impact is visible rather than hypothetical. With the public 12-photo roll,
+Pinhole reports **1.3 MB of original photo bytes not sent to an AI API**. Once
+the static application and model artifacts are cached, a search sends zero user
+content and waits on no cloud-inference round trip.
+
 The optimization is inseparable from the human value: less computation, memory,
 and network dependence are exactly what let personal photos remain personal.
 Unlike an on-device concept with a single timing, Pinhole ships reproducible Arm
@@ -64,6 +69,14 @@ The deployed product is also measured as a product: a dated Lighthouse 12.8.2
 mobile snapshot scored **97 Performance and 100 Accessibility / Best Practices /
 SEO**. The stronger full-flow gate then loaded the model, indexed and searched
 the real-photo roll, and found zero WCAG 2 A/AA violations after results settled.
+
+A fresh-profile audit of the deployed full-demo path also measures mobile
+delivery: the two split models, ORT loader/runtime, and custom kernel total
+**19.0 MiB of gzip-encoded inference-artifact responses**. The production worker
+requests the 3.20 MiB compressed plain threaded ORT WASM—not the unused 23.57 MB
+Asyncify dependency artifact—and the full browser gate now rejects an Asyncify
+request. The raw report records every URL, response length, and encoding; this is
+a transfer audit, not a latency claim.
 
 ## Measured optimization on Arm
 
@@ -179,11 +192,20 @@ an adoption and measurement checklist.
    and app assets have been cached, inference remains local and the app shell is
    offline-capable.
 
+The first uncached query includes tokenizer/session warm-up. Use a second
+**different** query to observe the steady-state encoder; an exact repeat is
+intentionally labelled `cached` in the interface.
+
 GitHub Pages cannot emit cross-origin-isolation headers itself, so Pinhole's
 same-origin service worker adds COOP/COEP to the app shell and performs one
 installation reload. That unlocks SharedArrayBuffer and up to four ONNX Runtime
 WASM threads on the hosted PWA. Unsupported browsers retain the exact same SIMD
 path with one thread rather than failing.
+
+The privacy architecture makes that strict isolation practical: application
+code, models, ONNX Runtime, WASM, fonts, and demo media are all same-origin, so
+COEP does not break a third-party dependency. The one-time reload is deliberate,
+and the status pill always reports the thread count actually in use.
 
 Public Arm64 run
 [`31634280630`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31634280630)
@@ -240,9 +262,11 @@ scalar tail. Tests compare it with straightforward signed arithmetic, including 
 Finally, browser threading and privacy need precise language. Multi-threaded WASM
 requires cross-origin isolation, so a custom service worker supplies COOP/COEP on
 the otherwise headerless static host. Pinhole reports the active thread count and
-degrades to one thread if isolation is unavailable. The app and model are
-downloaded static assets; “nothing leaves your phone” refers to user photos,
-queries, and inference data, which never cross the network boundary.
+degrades to one thread if isolation is unavailable. Keeping every dependency
+same-origin is both the privacy boundary and the condition that makes strict
+COEP safe. The app and model are downloaded static assets; “nothing leaves your
+phone” refers to user photos, queries, and inference data, which never cross the
+network boundary.
 
 ## Built with
 

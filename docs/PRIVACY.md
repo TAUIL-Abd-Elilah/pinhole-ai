@@ -7,6 +7,20 @@ photos are ordinary same-origin static downloads. User-selected photographs are
 never passed to `fetch`, `XMLHttpRequest`, a form, analytics, or a remote inference
 service. Model inference runs in a browser worker.
 
+After those versioned static assets are cached, a search sends zero user-content
+bytes and makes no request to an inference endpoint. “Nothing leaves your phone”
+describes photos, queries, embeddings, thumbnails, and inference data—not the
+initial download of the open application and model artifacts.
+
+## Why the privacy boundary also unlocks threading
+
+Multi-threaded WASM requires cross-origin isolation. Pinhole can apply strict
+COOP/COEP on a headerless static host because its code, models, runtime, WASM,
+fonts, and public demo media are all same-origin; there is no third-party runtime
+dependency for COEP to block. The service worker installs once, reloads once,
+and exposes SharedArrayBuffer for up to four ONNX Runtime threads. If isolation
+is unavailable, the same SIMD path continues with one thread.
+
 ## What is retained
 
 For each selected image, IndexedDB stores:

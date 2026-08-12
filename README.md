@@ -21,6 +21,12 @@ Built for the **Arm Create: AI Optimization Challenge 2026 — Mobile AI track**
 **Load demo roll**, and search for `golden dog in the snow`. The complete path
 runs in the browser; no backend or API key is involved.
 
+On the first production visit, the page reloads once to install cross-origin
+isolation; the status pill then reports the live WASM thread count. The first
+uncached query includes tokenizer/session warm-up, so use a second **different**
+phrase to observe the steady-state path. Repeating the same phrase deliberately
+reports `cached` instead of presenting cache reuse as encoder speed.
+
 Then inspect the [final raw Arm evidence](bench/results/cobalt-31625513958/)
 or run the complete local quality gate with one command:
 
@@ -213,6 +219,9 @@ network boundary: app/model download only; photos and inference stay in browser
 
 The inference worker keeps model work off the UI thread. Cross-origin-isolated
 deployments use up to four WASM threads; other hosts retain SIMD with one thread.
+That threading win follows directly from the privacy design: the application,
+models, runtime, WASM, fonts, and demo media are same-origin assets, so strict
+COEP does not break a third-party dependency or widen the network boundary.
 The custom vector kernel has a scalar TypeScript fallback and signed-INT8 parity
 tests, including non-multiple-of-16 tails. The index harness also times an
 equivalent signed-INT8 scalar control against the WASM batch kernel on the
@@ -236,14 +245,28 @@ npm run verify        # lint + unit tests + TypeScript + production PWA
 node tools/browser-smoke.mjs  # needs local Chrome and a running dev server
 node tools/browser-flow.mjs   # model load → 12-photo index → semantic search
 node tools/browser-offline.mjs # cache → force network offline → reload → search
+
+# Optional deterministic delivery profile: 4 Mbps down / 3 Mbps up / 50 ms
+PINHOLE_NETWORK_PROFILE=fast-4g PINHOLE_REPORT=.cache/flow.json \
+  node tools/browser-flow.mjs
 ```
 
 The full browser flow asserts that `golden dog in the snow` ranks the dog first,
-confirms the WASM SIMD path, injects axe-core after the ranked grid settles, fails
-on any WCAG 2 A/AA violation or console/request error, and saves the same screen
-shown above. The offline flow first proves an uncached request is blocked, then
-reloads the service-worker-controlled live PWA and finds a second photo from the
-persisted local index.
+confirms the WASM SIMD path, records cold-flow milestones and every ONNX/WASM
+response, injects axe-core after the ranked grid settles, fails on any WCAG 2
+A/AA violation or console/request error, and saves the same screen shown above.
+It also fails if the heavier Asyncify runtime is requested instead of Pinhole's
+pinned plain threaded runtime. The offline flow first proves an uncached request
+is blocked, then reloads the service-worker-controlled live PWA and finds a
+second photo from the persisted local index.
+
+A fresh-profile audit of the live full-demo path observed **19,893,682 bytes
+(19.0 MiB)** of gzip-encoded inference-artifact responses: the two split ONNX
+models, ORT loader/runtime, and custom kernel. The requested ORT WASM response was
+3,352,806 bytes; the unused 23.57 MB Asyncify dependency artifact was never
+requested. These are HTTP `Content-Length` values—not cache footprint or a
+latency benchmark—and the [raw browser report](docs/evidence/live-browser-payload-20260812.json)
+records the exact URLs and encodings.
 
 ## Privacy boundary
 
@@ -255,6 +278,10 @@ persisted local index.
 - Clearing the local index deletes both derivatives.
 - The model and ONNX runtime are same-origin static assets. Once cached, the app
   can be installed and used offline.
+
+With the 12-photo public roll loaded, the interface shows **1.3 MB not sent to
+an AI API**. After static assets are cached, each query sends zero user-content
+bytes and incurs no cloud-inference round trip.
 
 This is a technical privacy boundary, not a promise in marketing copy. See
 [`docs/PRIVACY.md`](docs/PRIVACY.md) for the threat model and limitations.
