@@ -66,6 +66,8 @@ jobs:
           PINHOLE_SCREENSHOT=.cache/pinhole-browser-arm.png \
           PINHOLE_FULL_PAGE=false \
           node tools/browser-flow.mjs
+          PINHOLE_VIDEO=.cache/video/pinhole-demo-arm.webm \
+          node tools/record-demo.mjs
       - name: Benchmark exact-parity model split
         run: python tools/benchmark_model.py --samples 50 --warmup 7 --output bench-artifacts/model-cobalt.json
       - name: Validate real-photo retrieval quality
@@ -78,4 +80,5 @@ jobs:
           path: |
             bench-artifacts/*.json
             .cache/pinhole-browser-arm.png
+            .cache/video/pinhole-demo-arm.webm
           if-no-files-found: error
