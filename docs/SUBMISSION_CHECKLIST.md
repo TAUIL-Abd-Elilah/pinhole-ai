@@ -25,19 +25,19 @@ does not become the failure mode.
 - [x] Public YouTube video is embeddable while signed out:
   <https://www.youtube.com/watch?v=O7vfNBXskPg>.
 
-## Manual Devpost actions
+## Devpost actions
 
-- [ ] Join the challenge with the intended Devpost account.
-- [ ] Join the Arm Developer Program using the same email address, as required by
+- [x] Join the challenge with the intended Devpost account.
+- [x] Join the Arm Developer Program using the same email address, as required by
   the official rules.
-- [ ] Create or edit the submission and select **Mobile AI**.
-- [ ] Use project name **Pinhole** and tagline **Describe the moment. Find the
+- [x] Create the submission and identify it throughout as **Mobile AI**.
+- [x] Use project name **Pinhole** and tagline **Describe the moment. Find the
   photo. Nothing leaves your phone.**
-- [ ] Paste and format the copy from [`SUBMISSION.md`](SUBMISSION.md).
-- [ ] Use the exact links, technology list, and suggested survey responses in
+- [x] Paste and format the public copy from [`DEVPOST_STORY.md`](DEVPOST_STORY.md).
+- [x] Use the exact links, technology list, and suggested survey responses in
   [`DEVPOST_FORM.md`](DEVPOST_FORM.md), changing any personal survey response
   that is not true for the entrant.
-- [ ] Add the live app and public repository URLs from the metadata section.
+- [x] Add the live app and public repository URLs from the metadata section.
 - [x] Upload `.cache/final-submission/Pinhole-demo-mobile-native-Arm64-narrated.mp4`
   publicly. Use <https://www.youtube.com/watch?v=O7vfNBXskPg> on Devpost; the
   caption-card-only fallback is the adjacent `captioned.mp4`.
@@ -46,16 +46,19 @@ does not become the failure mode.
   This is the highest-value optional upgrade; it must not delay submission.
 - [ ] Use `.cache/final-submission/Pinhole-video-thumbnail-1280x720.png` as the video
   thumbnail and optionally upload `Pinhole-demo-en.srt` as English captions.
-- [ ] Upload `media/pinhole-cover.png` first, followed by
+- [x] Upload `media/pinhole-cover.png` first, followed by
   `media/pinhole-mobile.png`, `media/pinhole-offline-proof.png`, and
   `media/pinhole-search.png`.
-- [ ] State that the project was created August 12, 2026, during the submission
+- [x] State that the project was created August 12, 2026, during the submission
   period; the public commit history is the evidence.
-- [ ] Preview every link in a signed-out/private browser window.
-- [ ] Submit, then reopen the project page and confirm it appears as submitted.
+- [x] Preview every judge-facing link from a signed-out browser; all returned
+  HTTP 200 with zero page errors on August 13, 2026.
+- [x] Submit and confirm the signed-out page explicitly displays **Submitted to
+  Arm Create: AI Optimization Challenge**:
+  <https://devpost.com/software/pinhole>.
 - [ ] After submission, optionally use [`SHARE_COPY.md`](SHARE_COPY.md) for one
-  evidence-first Arm community post; replace both URL placeholders and follow
-  the channel's self-promotion rules.
+  evidence-first Arm community post and follow the channel's self-promotion
+  rules.
 
 ## Final smoke path
 

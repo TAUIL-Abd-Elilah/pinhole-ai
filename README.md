@@ -6,6 +6,10 @@
 [![MIT licensed](https://img.shields.io/badge/code-MIT-284c52.svg)](LICENSE)
 [![Arm Mobile AI](https://img.shields.io/badge/Arm-Mobile_AI-ed6547.svg)](https://arm-ai-optimization-challenge.devpost.com/)
 
+**[View the submitted Devpost project](https://devpost.com/software/pinhole)** ·
+**[Watch the 63-second mobile demo](https://www.youtube.com/watch?v=O7vfNBXskPg)** ·
+**[Open the live PWA](https://tauil-abd-elilah.github.io/pinhole-ai/)**
+
 Pinhole is an installable, local-first camera-roll search engine for Arm-powered
 Android devices. Type a memory such as _“golden dog in the snow”_; a 24 MB INT8
 TinyCLIP model embeds the query on-device, and a 434-byte WebAssembly SIMD kernel
@@ -17,8 +21,7 @@ Built for the **Arm Create: AI Optimization Challenge 2026 — Mobile AI track**
 
 ## Judge it in 90 seconds
 
-**[Watch the 63-second mobile demo](https://www.youtube.com/watch?v=O7vfNBXskPg)**,
-then **[open the live PWA](https://tauil-abd-elilah.github.io/pinhole-ai/)**, choose
+Open the live PWA, choose
 **Load demo roll**, and search for `golden dog in the snow`. The complete path
 runs in the browser; no backend or API key is involved.
 
@@ -44,7 +47,9 @@ search. It fails on a wrong result or any unexpected browser error.
 
 The native Arm64 browser proof, exact model hashes, benchmark methodology, and
 quality guards are linked directly below; no account or special hardware is
-needed to evaluate the hosted product.
+needed to evaluate the hosted product. The final
+[signed-out submission audit](docs/SUBMISSION_CONFIRMATION.md) records the
+public Devpost state and every judge-facing link.
 
 The latest [public Arm64 quality run](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31655157040)
 also proves the headerless static-host isolation path, exact query-cache reuse,

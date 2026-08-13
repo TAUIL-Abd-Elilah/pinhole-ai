@@ -10,6 +10,7 @@ the entrant and should be edited wherever they do not match their experience.
 - **Project name:** Pinhole
 - **Tagline:** Describe the moment. Find the photo. Nothing leaves your phone.
 - **Track:** Mobile AI (Track 3)
+- **Submitted project:** https://devpost.com/software/pinhole
 - **Live application:** https://tauil-abd-elilah.github.io/pinhole-ai/
 - **Video:** https://www.youtube.com/watch?v=O7vfNBXskPg
 - **Repository:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai
@@ -72,6 +73,7 @@ Reasonable selections:
 
 ## Final verification
 
-Open the repository, live PWA, video, and final Devpost page in a signed-out
-window. The submission is not complete until Devpost shows it as submitted—not
-merely saved as a draft—before August 14, 2026 at 4:00 PM PDT.
+Final signed-out verification completed August 13, 2026: the public page at
+https://devpost.com/software/pinhole shows **Submitted to Arm Create: AI
+Optimization Challenge**, embeds the video, renders all four gallery images, and
+exposes the live PWA, repository, and evidence links.

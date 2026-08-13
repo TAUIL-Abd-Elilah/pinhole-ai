@@ -1,10 +1,11 @@
-# Pinhole — Devpost submission copy
+# Pinhole — extended submission evidence
 
 ## Submission metadata
 
 - **Project:** Pinhole
 - **Tagline:** Describe the moment. Find the photo. Nothing leaves your phone.
 - **Track:** Mobile AI (Track 3)
+- **Submitted project:** https://devpost.com/software/pinhole
 - **Live application:** https://tauil-abd-elilah.github.io/pinhole-ai/
 - **Public video:** https://www.youtube.com/watch?v=O7vfNBXskPg
 - **Public source:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai
