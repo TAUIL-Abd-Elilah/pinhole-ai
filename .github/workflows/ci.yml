@@ -75,7 +75,8 @@ jobs:
           PINHOLE_SCREENSHOT=.cache/pinhole-browser-arm.png \
           PINHOLE_FULL_PAGE=false \
           node tools/browser-flow.mjs
-          PINHOLE_VIDEO=.cache/video/pinhole-demo-arm.webm \
+          PINHOLE_DEMO_FORMAT=mobile \
+          PINHOLE_VIDEO=.cache/video/pinhole-demo-arm-mobile.webm \
           node tools/record-demo.mjs
       - name: Validate real-photo retrieval quality
         run: node tools/benchmark-retrieval.mjs --output=bench-artifacts/retrieval-cobalt.json
@@ -90,5 +91,5 @@ jobs:
             .cache/pinhole-isolated-local.png
             .cache/pinhole-offline.png
             .cache/pinhole-offline-state.png
-            .cache/video/pinhole-demo-arm.webm
+            .cache/video/pinhole-demo-arm-mobile.webm
           if-no-files-found: error

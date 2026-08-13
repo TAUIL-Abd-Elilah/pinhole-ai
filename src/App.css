@@ -662,9 +662,14 @@
 
 @media (max-width: 760px) {
   .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
     min-height: 58px;
     padding: 0 16px;
     grid-template-columns: 1fr auto;
+    background: rgba(220, 231, 232, 0.96);
+    backdrop-filter: blur(10px);
   }
 
   .challenge-label {

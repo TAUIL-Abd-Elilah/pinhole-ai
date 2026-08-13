@@ -4,16 +4,26 @@ import { browserExecutablePath } from './browser-executable.mjs'
 
 const target = process.env.PINHOLE_URL ?? 'http://127.0.0.1:5173'
 const executablePath = browserExecutablePath()
-const output = process.env.PINHOLE_VIDEO ?? '.cache/video/pinhole-demo.webm'
+const format = process.env.PINHOLE_DEMO_FORMAT ?? 'landscape'
+if (!['landscape', 'mobile'].includes(format)) {
+  throw new Error(`Unknown PINHOLE_DEMO_FORMAT: ${format}`)
+}
+const isMobileDemo = format === 'mobile'
+const output =
+  process.env.PINHOLE_VIDEO ??
+  `.cache/video/pinhole-demo${isMobileDemo ? '-mobile' : ''}.webm`
 const videoDirectory = '.cache/video/playwright'
-const viewport = { width: 1280, height: 720 }
+const viewport = isMobileDemo ? { width: 450, height: 800 } : { width: 1280, height: 720 }
+const videoSize = viewport
 
 await mkdir(videoDirectory, { recursive: true })
 const browser = await chromium.launch({ executablePath, headless: true })
 const context = await browser.newContext({
   viewport,
   deviceScaleFactor: 1,
-  recordVideo: { dir: videoDirectory, size: viewport },
+  isMobile: isMobileDemo,
+  hasTouch: isMobileDemo,
+  recordVideo: { dir: videoDirectory, size: videoSize },
 })
 const page = await context.newPage()
 const errors = []
@@ -89,6 +99,45 @@ async function showCard({ kicker, title, body, stats = [], footer = '' }) {
             text-transform: uppercase;
           }
           #pinhole-video-card .footer strong { color: #ed6547; font-weight: 500; }
+          @media (max-width: 760px) {
+            #pinhole-video-card {
+              padding: 34px 28px 28px;
+              background:
+                linear-gradient(90deg, transparent 49.8%, rgba(20,40,44,.055) 50%, transparent 50.2%),
+                #dce7e8;
+            }
+            #pinhole-video-card::before {
+              right: 28px; top: 32px; width: 24px; height: 24px;
+              box-shadow: inset 0 0 0 7px #dce7e8, inset 0 0 0 12px #ed6547;
+            }
+            #pinhole-video-card .kicker {
+              max-width: calc(100% - 42px); font-size: 9px; line-height: 1.45;
+            }
+            #pinhole-video-card .content { max-width: none; }
+            #pinhole-video-card h2 {
+              max-width: none; font-size: 58px; line-height: .92; letter-spacing: -.06em;
+            }
+            #pinhole-video-card .body {
+              max-width: none; margin-top: 22px; font-size: 16px; line-height: 1.45;
+            }
+            #pinhole-video-card .stats {
+              margin-top: 28px; display: block; border-bottom: 0;
+            }
+            #pinhole-video-card .stat {
+              min-height: 61px; padding: 12px 0; border-left: 0;
+              border-bottom: 1px solid rgba(20,40,44,.22);
+              display: flex; align-items: center; justify-content: space-between; gap: 18px;
+            }
+            #pinhole-video-card .stat:first-child { padding-left: 0; }
+            #pinhole-video-card .stat strong { flex: none; font-size: 32px; }
+            #pinhole-video-card .stat span {
+              margin-top: 0; max-width: 150px; font-size: 8px; text-align: right;
+            }
+            #pinhole-video-card .footer {
+              align-items: flex-start; flex-direction: column; gap: 7px;
+              font-size: 8px; overflow-wrap: anywhere;
+            }
+          }
         `
         document.head.append(style)
       }
@@ -205,6 +254,10 @@ try {
   await pause(8900)
   await hideCard()
 
+  if (isMobileDemo) {
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }))
+    await pause(500)
+  }
   await enableOfflineProof()
   await search.fill('coffee on an open book')
   await page.getByRole('button', { name: 'Find it' }).click()
@@ -259,6 +312,9 @@ console.log(
   JSON.stringify(
     {
       output,
+      format,
+      viewport,
+      videoSize,
       firstResult,
       offlineTopResult,
       networkForcedOffline,
