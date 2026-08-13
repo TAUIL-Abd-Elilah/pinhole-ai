@@ -668,8 +668,7 @@
     min-height: 58px;
     padding: 0 16px;
     grid-template-columns: 1fr auto;
-    background: rgba(220, 231, 232, 0.96);
-    backdrop-filter: blur(10px);
+    background: var(--mist);
   }
 
   .challenge-label {
@@ -679,15 +678,19 @@
   .engine-state {
     max-width: 165px;
     overflow: hidden;
-    font-size: 9px;
+    font-size: 10px;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .engine-state:not(.engine-state--offline) {
+    color: var(--ink);
   }
 
   .engine-state--offline {
     max-width: 210px;
     padding: 8px 10px;
-    font-size: 8px;
+    font-size: 9px;
   }
 
   .workspace {
