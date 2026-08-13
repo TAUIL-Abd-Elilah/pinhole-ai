@@ -14,8 +14,9 @@ the entrant and should be edited wherever they do not match their experience.
 - **Video:** https://www.youtube.com/watch?v=O7vfNBXskPg
 - **Repository:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai
 - **License:** MIT
-- **Project story / description:** paste the sections from
-  [`SUBMISSION.md`](SUBMISSION.md), preserving the benchmark table and links.
+- **Project story / description:** paste all of
+  [`DEVPOST_STORY.md`](DEVPOST_STORY.md). It is the public, judge-facing version;
+  `SUBMISSION.md` remains the longer evidence reference.
 - **Video title and description:** use [`VIDEO_DESCRIPTION.md`](VIDEO_DESCRIPTION.md).
 - **Primary image:** `media/pinhole-cover.png`
 - **Additional images:** `media/pinhole-mobile.png`,
