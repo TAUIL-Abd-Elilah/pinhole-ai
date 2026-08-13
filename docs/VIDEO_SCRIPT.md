@@ -1,9 +1,9 @@
 # Pinhole demo video script
 
 Target length: 60–75 seconds. Keep the final upload below three minutes. Use no
-music or third-party logos. `node tools/record-demo.mjs` produces the captioned
-browser footage; replace or supplement it with real Android footage when a device
-is available.
+music or third-party logos. `PINHOLE_DEMO_FORMAT=mobile node
+tools/record-demo.mjs` produces the portrait mobile-viewport browser footage;
+replace or supplement it with real Android footage when a device is available.
 
 ## Narration
 
@@ -47,6 +47,6 @@ portrait capture: finish one online run, turn on Airplane mode, reopen Pinhole,
 search `coffee on an open book`, and hold on the correct result plus the in-app
 offline status. Capture the live thread count before enabling Airplane mode. Keep
 the controlled Neoverse-N2 numbers in the narration and label phone
-timings as single-device UI telemetry, not benchmark medians. The existing Arm64
-video remains the compliant fallback; do not miss submission waiting for this
-optional shot.
+timings as single-device UI telemetry, not benchmark medians. The existing
+portrait Arm64 mobile-viewport video remains the compliant fallback; do not miss
+submission waiting for this optional physical-device shot.

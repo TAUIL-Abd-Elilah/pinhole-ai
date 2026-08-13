@@ -10,8 +10,9 @@
 - `pinhole-cover.png` is rendered by `tools/render-cover.mjs` from that Arm
   screenshot and the committed benchmark results.
 - `pinhole-search.png` is the corresponding full desktop development capture.
-- `pinhole-offline-proof.png` is an unmodified frame from native Arm64 Actions
-  run [`31648817286`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31648817286).
+- `pinhole-offline-proof.png` is an unmodified 9:16 mobile-viewport frame from
+  native Arm64 Actions run
+  [`31655157040`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31655157040).
   The recorder set the Chromium context offline, asserted `navigator.onLine` was
   false, searched for “coffee on an open book,” and asserted that photo ranked
   first with zero console/request errors.

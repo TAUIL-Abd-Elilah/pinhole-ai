@@ -36,7 +36,7 @@ does not become the failure mode.
   [`DEVPOST_FORM.md`](DEVPOST_FORM.md), changing any personal survey response
   that is not true for the entrant.
 - [ ] Add the live app and public repository URLs from the metadata section.
-- [ ] Upload `.cache/final-submission/Pinhole-demo-native-Arm64-narrated.mp4` to
+- [ ] Upload `.cache/final-submission/Pinhole-demo-mobile-native-Arm64-narrated.mp4` to
   YouTube, Vimeo, or Youku as a publicly visible video, then add that public URL
   to Devpost. The caption-card-only fallback is the adjacent `captioned.mp4`.
 - [ ] If any Arm Android phone is available, capture the short Airplane-mode

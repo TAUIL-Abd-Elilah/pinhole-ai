@@ -10,7 +10,7 @@
 - **License:** MIT
 - **Final Arm evidence:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31625513958
 - **Committed raw evidence:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/tree/main/bench/results/cobalt-31625513958
-- **Native Arm demo footage:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31648817286
+- **Native Arm portrait demo footage:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31655157040
 
 ## Judge evidence map
 
@@ -241,12 +241,13 @@ COEP does not break a third-party dependency. The one-time reload is deliberate,
 and the status pill always reports the thread count actually in use.
 
 Public Arm64 run
-[`31648817286`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31648817286)
+[`31655157040`](https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31655157040)
 tests that static-host path without server headers, asserts cross-origin
 isolation and repeated-query cache correctness, then forces the browser offline,
 reloads, and completes another search with zero request or console errors. The
-same run records the judge-facing demo in native Arm64 Chromium and independently
-forces networking offline before its second successful search.
+same run records the judge-facing demo in a 9:16 mobile viewport in native Arm64
+Chromium and independently forces networking offline before its second successful
+search.
 
 ### Build from source
 

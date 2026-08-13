@@ -22,11 +22,15 @@ the browser on Arm-powered client devices. In the video, the browser network is
 visibly forced offline before a second natural-language search returns the
 correct photo.
 
-This 63-second product demo was recorded by native Arm64 Chromium on a Microsoft
-Cobalt 100 runner. The public workflow includes the recording, static-host
-isolation and offline checks, screenshots, raw JSON, and a log that explicitly
-confirms the WASM SIMD path:
-https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31648817286
+This 63-second portrait product demo was recorded in a 9:16 mobile viewport by
+native Arm64 Chromium on a Microsoft Cobalt 100 runner. The public workflow
+includes the recording, static-host isolation and offline checks, screenshots,
+raw JSON, and a log that explicitly confirms the WASM SIMD path:
+https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31655157040
+
+The mobile viewport demonstrates the responsive PWA; it is not presented as a
+physical-phone capture. The same live PWA can be opened directly on an Arm
+Android phone and installed with **Add to Home screen**.
 
 Cobalt is the reproducible Arm measurement and recording host—not an inference
 service used by Pinhole. The deployed product has no application backend: when
