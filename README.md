@@ -17,7 +17,8 @@ Built for the **Arm Create: AI Optimization Challenge 2026 — Mobile AI track**
 
 ## Judge it in 90 seconds
 
-**[Open the live PWA](https://tauil-abd-elilah.github.io/pinhole-ai/)**, choose
+**[Watch the 63-second mobile demo](https://www.youtube.com/watch?v=O7vfNBXskPg)**,
+then **[open the live PWA](https://tauil-abd-elilah.github.io/pinhole-ai/)**, choose
 **Load demo roll**, and search for `golden dog in the snow`. The complete path
 runs in the browser; no backend or API key is involved.
 

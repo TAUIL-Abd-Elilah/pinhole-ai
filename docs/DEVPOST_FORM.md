@@ -11,6 +11,7 @@ the entrant and should be edited wherever they do not match their experience.
 - **Tagline:** Describe the moment. Find the photo. Nothing leaves your phone.
 - **Track:** Mobile AI (Track 3)
 - **Live application:** https://tauil-abd-elilah.github.io/pinhole-ai/
+- **Video:** https://www.youtube.com/watch?v=O7vfNBXskPg
 - **Repository:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai
 - **License:** MIT
 - **Project story / description:** paste the sections from

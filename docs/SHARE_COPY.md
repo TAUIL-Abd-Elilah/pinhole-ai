@@ -1,7 +1,7 @@
 # Evidence-first launch copy
 
-Use this only after the Devpost project and video are public. Replace
-`<DEVPOST_URL>` and `<VIDEO_URL>`; do not imply Arm endorsement or post outside
+Use this only after the Devpost project is public. Replace `<DEVPOST_URL>`; do
+not imply Arm endorsement or post outside
 channels where project sharing is allowed.
 
 ## Arm Developer Program community / Discord
@@ -20,7 +20,7 @@ The optimization is measured on native Arm64 Chromium / Neoverse-N2:
 Live PWA: https://tauil-abd-elilah.github.io/pinhole-ai/
 Source + raw evidence: https://github.com/TAUIL-Abd-Elilah/pinhole-ai
 Devpost: <DEVPOST_URL>
-Video: <VIDEO_URL>
+Video: https://www.youtube.com/watch?v=O7vfNBXskPg
 
 I would especially value feedback on the ONNX graph split and the 434-byte
 signed-INT8 WASM SIMD kernel.

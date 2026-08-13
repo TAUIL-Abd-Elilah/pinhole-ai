@@ -6,6 +6,7 @@
 - **Tagline:** Describe the moment. Find the photo. Nothing leaves your phone.
 - **Track:** Mobile AI (Track 3)
 - **Live application:** https://tauil-abd-elilah.github.io/pinhole-ai/
+- **Public video:** https://www.youtube.com/watch?v=O7vfNBXskPg
 - **Public source:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai
 - **License:** MIT
 - **Final Arm evidence:** https://github.com/TAUIL-Abd-Elilah/pinhole-ai/actions/runs/31625513958
